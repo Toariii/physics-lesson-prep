@@ -522,8 +522,6 @@ Accepted alternative methods
             'raw versus transformed data', 'Do not infer causation', 'purpose, represented system, topology or geometry',
             'Generated art remains `draft`', 'apparatus ratings', 'hazards, persons at risk, controls, residual risk',
             'simulation, video, teacher demonstration, or prepared dataset fallback',
-            'qualitative observation as quantitative verification', 'spring-balance reading as net force',
-            'verify `F = ma` without a defensible acceleration measurement',
             'local policy and qualified-teacher approval', 'high risk', 'no undeclared assumption',
             'valid alternative solutions', 'confirmed primary textbook', 'Do not mix conventions silently',
             'Otherwise label it `draft` and list the exact blockers'
@@ -531,6 +529,31 @@ Accepted alternative methods
             if ($physicsAuditContent -notmatch [regex]::Escape($auditRule)) {
                 $failures.Add("physics-audit.md missing required rule: $auditRule")
             }
+        }
+        foreach ($prohibition in @(
+            @{ Name = 'qualitative observation'; Pattern = '(?is)\b(?:do not|must not|cannot)\s+(?:present|treat|use|claim)\b[^.\r\n]{0,160}\bqualitative observation\b[^.\r\n]{0,100}\bquantitative verification\b' },
+            @{ Name = 'spring-balance net force'; Pattern = '(?is)\b(?:do not|must not|cannot)\s+(?:treat|present|use|claim)\b[^.\r\n]{0,160}\bspring-balance reading\b[^.\r\n]{0,100}\bnet force\b[^.\r\n]{0,120}\b(?:unless|without)\b[^.\r\n]{0,160}\bmodel(?:ed|led|ing)?\b' },
+            @{ Name = 'F = ma acceleration measurement'; Pattern = '(?is)\b(?:do not|must not|cannot)\s+(?:claim\s+to\s+)?verify\s+`?F\s*=\s*ma`?\s+without\s+(?:a\s+)?defensible acceleration measurement\b' }
+        )) {
+            if ($physicsAuditContent -notmatch $prohibition.Pattern) {
+                $failures.Add("physics-audit.md missing explicit prohibition: $($prohibition.Name)")
+            }
+        }
+        foreach ($conflict in @(
+            @{ Name = 'qualitative observation permission'; Pattern = '(?im)(?:^|[.!?]\s+)(?:you\s+)?(?:may|can|treat|present)\b[^.!?\r\n]{0,160}\bqualitative observation\b[^.!?\r\n]{0,100}\bquantitative verification\b' },
+            @{ Name = 'F = ma permission'; Pattern = '(?im)(?:^|[.!?]\s+)(?:you\s+)?(?:may|can)\s+claim\s+to\s+verify\s+`?F\s*=\s*ma`?\s+without\s+(?:a\s+)?defensible acceleration measurement\b' },
+            @{ Name = 'spring-balance net-force permission'; Pattern = '(?im)(?:^|[.!?]\s+)(?:you\s+)?(?:may|can|treat|present)?\s*(?:a\s+)?spring-balance reading\s+is\s+(?:the\s+)?net force\s+without\b' }
+        )) {
+            if ($physicsAuditContent -match $conflict.Pattern) {
+                $failures.Add("physics-audit.md contains contradictory permission: $($conflict.Name)")
+            }
+        }
+        if ($physicsAuditContent -notmatch '(?is)\bteacher-review-ready\b[^.\r\n]{0,100}\bonly when\b[^.\r\n]{0,180}\bcourse\b[^.\r\n]{0,180}\beducation-design\b[^.\r\n]{0,180}\bphysics\b[^.\r\n]{0,180}\bintended-use\b[^.\r\n]{0,100}\bgates?\b[^.\r\n]{0,60}\bpass\b') {
+            $failures.Add("physics-audit.md must restrict teacher-review-ready to all release gates passing")
+        }
+        if ($physicsAuditContent -match '(?im)(?:^|[.!?]\s+)(?:all\s+)?(?:packages?|outputs?|materials?)\s+(?:are|may be|can be|should be)\s+(?:label(?:ed|led)|released as)\s+`?teacher-review-ready`?\b' -or
+            $physicsAuditContent -match '(?im)(?:^|[.!?]\s+)(?:always|unconditionally)\s+(?:label|release)\b[^.!?\r\n]{0,100}\bteacher-review-ready\b') {
+            $failures.Add("physics-audit.md contains unconditional teacher-review-ready release")
         }
     }
 
@@ -601,7 +624,9 @@ Accepted alternative methods
 | Candidate | Author | Publisher | ISBN | Edition | Chapters | Level | Strengths | Limitations | Notation differences | Adoption evidence |
 |---|---|---|---|---|---|---|---|---|---|---|
 '@
-        if (-not ($templatesContent -replace "`r`n", "`n").Contains($exactTable.Trim())) {
+        $normalizedTemplates = $templatesContent -replace "`r`n", "`n"
+        $normalizedExactTable = ($exactTable -replace "`r`n", "`n").Trim()
+        if (-not $normalizedTemplates.Contains($normalizedExactTable)) {
             $failures.Add("templates.md Textbook Comparison must preserve the exact header and separator structure")
         }
 
