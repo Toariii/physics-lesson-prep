@@ -523,6 +523,7 @@ Accepted alternative methods
             'Generated art remains `draft`', 'apparatus ratings', 'hazards, persons at risk, controls, residual risk',
             'simulation, video, teacher demonstration, or prepared dataset fallback',
             'qualitative observation as quantitative verification', 'spring-balance reading as net force',
+            'verify `F = ma` without a defensible acceleration measurement',
             'local policy and qualified-teacher approval', 'high risk', 'no undeclared assumption',
             'valid alternative solutions', 'confirmed primary textbook', 'Do not mix conventions silently',
             'Otherwise label it `draft` and list the exact blockers'

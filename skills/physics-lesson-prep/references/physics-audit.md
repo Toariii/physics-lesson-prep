@@ -42,7 +42,7 @@ Every diagram specification states purpose, represented system, topology or geom
 
 Confirm apparatus ratings, stable mounting, safe clearances, supervision, and shutdown procedures. Confirm equipment quantity, grouping, reset time, visibility, and whether every learner can observe the decisive event or reading. Identify hazards, persons at risk, controls, residual risk, and local approval needs.
 
-Plan for equipment failure, invisible effects, weak signals, excessive setup time, and unusable data. Provide a simulation, video, teacher demonstration, or prepared dataset fallback when needed. Do not present qualitative observation as quantitative verification. Do not treat a spring-balance reading as net force unless every other force component is modeled and accounted for.
+Plan for equipment failure, invisible effects, weak signals, excessive setup time, and unusable data. Provide a simulation, video, teacher demonstration, or prepared dataset fallback when needed. Do not present qualitative observation as quantitative verification. Do not treat a spring-balance reading as net force unless every other force component is modeled and accounted for. Do not claim to verify `F = ma` without a defensible acceleration measurement.
 
 Require local policy and qualified-teacher approval. Treat mains electricity, high voltage, high current, strong magnets, radiation sources, lasers, intense light, pressure or vacuum systems, projectiles, rotating machinery, hot surfaces, flames, cryogens, hazardous chemicals, heavy suspended loads, glass under stress, and work at height as high risk unless a stricter local classification applies.
 
