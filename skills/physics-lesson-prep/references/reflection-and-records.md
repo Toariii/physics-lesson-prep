@@ -2,13 +2,13 @@
 
 ## File-Write Consent Gate
 
-Before any write, obtain explicit permission for the save directory, anonymous identifier, exact fields and files, and whether originals may be copied or must remain reference only. Preview changes before writing and report every changed file afterward. Temporary consultation means no save. Never auto write a learner or course record.
+Before any write, obtain explicit permission for the save directory, pseudonymous or anonymous-minimized identifier, exact fields and files, retention choice, access scope, and whether originals may be copied or must remain reference only. Preview changes before writing and report every changed file afterward. Temporary consultation means no save. Never auto write a learner or course record, and never store passwords, tokens, credentials, authentication codes, or other secrets.
 
 Permission applies only to the previewed write. If the directory, identifier, fields, files, or source-artifact treatment changes, preview again and renew permission.
 
 ## Suggested Anonymous Record Structure
 
-Use this structure when the teacher approves persistent records:
+Use this structure when the teacher approves persistent records. Treat it as pseudonymous unless a data minimization review supports a stronger classification: an anonymous identifier alone does not guarantee anonymity, and combinations of quasi-identifiers can re-identify a learner.
 
 ```text
 physics-courses/<anonymous-id>/
@@ -21,7 +21,7 @@ physics-courses/<anonymous-id>/
   resources/
 ```
 
-- `profile.md` stores the anonymous learning context, goals, constraints, and accommodations.
+- `profile.md` stores the pseudonymous, minimized learning context, goals, constraints, and accommodations.
 - `curriculum-evidence.md` stores verified course boundaries, source references, and conflicts.
 - `course-plan.md` stores confirmed routes, cycles, dependencies, capacity, and approved revisions.
 - `progress-log.md` stores dated reflection, mastery evidence, adjustment decisions, and change history.
@@ -33,19 +33,23 @@ Preserve histories. Append or version changes rather than overwriting prior evid
 
 ## Allowed And Prohibited Fields
 
-Allowed fields are teaching-relevant and anonymous: region, learner stage, education system, course identity, goals, evidence summaries, representative errors, mastery, progress, workload, and accommodations needed for teaching.
+Allowed fields are teaching-relevant and pseudonymous or anonymous-minimized: region, learner stage, education system, course identity, goals, evidence summaries, representative errors, mastery, progress, workload, and accommodations needed for teaching. Before saving, conduct a data minimization review of quasi-identifiers including region, stage, course, school, accommodations, and distinctive error patterns; omit, coarsen, or generalize them where possible. Store a school name only when essential, specifically consented, and permitted by institution policy.
 
-Prohibited fields include real names in filenames or records; phone numbers, email addresses, social accounts, government or school identifiers, addresses, credentials or authentication data, original medical records, financial details, unrelated family information, identifiable information about other students, and full raw school-system screenshots. A school name may be used temporarily for research. Save it only with consent and only when necessary; remove it from external examples and cases.
+Prohibited fields include real names in filenames or records; phone numbers, email addresses, social accounts, government or school identifiers, addresses, credentials or authentication data, secrets, original medical records, financial details, unrelated family information, identifiable information about other students, and full raw school-system screenshots. A school name may be used temporarily for research but is not saved by default; remove it from external examples and cases.
+
+Set a retention period and review date, with a teacher-controlled deletion or read-only archive decision when the period ends, subject to institutional requirements. Limit access to the authorized teacher or institution, and use device or workspace encryption and access controls where available. The teacher must confirm the applicable local law, institution policy, lawful basis, and guardian or learner consent where required. This is operational skill guidance, not legal advice or a claim of compliance.
+
+Before export, strip direct identifiers and unnecessary quasi-identifiers, preview the export, and obtain teacher approval. Record the export recipient, purpose, fields, and decision.
 
 ## Source-Artifact Handling
 
-Redact and minimize artifacts before upload. Ask whether each approved artifact should be copied or reference only, and extract only teaching-relevant evidence. Do not reproduce incidental personally identifiable information. If an artifact cannot be safely minimized, request an anonymized replacement before save.
+Redact and minimize each artifact before upload. Ask whether each approved artifact should be copied or reference only, and extract only teaching-relevant evidence. Do not reproduce incidental personally identifiable information. If an artifact cannot be safely minimized, request an anonymized replacement before save.
 
 Do not delete an original or source artifact without authority. Preserve copyright, attribution, provenance, license, and source references for copied, adapted, or referenced material.
 
 ## One-To-One And Small-Group Reflection
 
-Before the next formal batch, collect completed and uncompleted content, independence, representative successes and errors, exact sticking point, timing, homework evidence, learner feedback, and teacher judgment. Natural language is accepted: structure it into these fields, show the structured reflection, and wait for the teacher to confirm it. This confirmation is a hard gate.
+Before the next formal batch, collect completed and uncompleted content, independence, representative success, error or exact sticking point where present, timing, homework evidence only when homework was assigned, otherwise class or assessment evidence, learner feedback, and teacher judgment. Natural language is accepted: structure it into these fields, show the structured reflection, and wait for the teacher to confirm it. This confirmation is a hard gate.
 
 ## Regular-Class Evidence
 
@@ -86,7 +90,7 @@ Every change-history entry records timestamp, before, after, reason, teacher con
 
 ## Next-Batch Gate
 
-For one-to-one or small-group teaching, the next batch requires prior batch reflection, at least one representative error, homework or class evidence, an approved adjustment, and no unresolved proposed changes. For a regular class, require at least two evidence items from the regular-class list.
+For one-to-one or small-group teaching, the next batch requires prior batch reflection, representative learning evidence consisting of a success, error, sticking point, or completed assessment or observation, an approved adjustment or confirmed decision to continue unchanged, and no unresolved proposed changes. Require homework evidence only when homework was assigned; otherwise use class or assessment evidence. An error-free batch may advance when the available evidence supports the mastery judgment. Never fabricate an error, homework result, observation, assessment, or mastery claim to satisfy the gate. For a regular class, require at least two evidence items from the regular-class list.
 
 If evidence is insufficient, provide only a diagnostic, a data-collection template, or a clearly labeled provisional outline; do not produce a formal batch. Apply this gate at batch level, normally after each two-to-four-lesson batch rather than after every isolated lesson.
 
@@ -96,6 +100,8 @@ The completion summary records initial goals, actual teaching delivered, changes
 
 ## Damaged Or Conflicting Record Handling
 
-If a record is damaged, incomplete, or internally conflicting, stop writes, show the conflict, and offer backup or recovery paths before proceeding. If a cited source artifact is missing, stop citing it as verified. Course or assessment version changes roll back to S5-S6 for renewed validation.
+If a record is damaged, incomplete, or internally conflicting, stop writes. Preserve the damaged original read-only and compute or capture a hash if possible. Show the conflict and offer backup or recovery paths. Restore a backup to a new path; never overwrite the damaged original. Validate the backup structure and inventory before use, and record its source, provenance, hash where available, and recovered fields.
+
+Preview recovery changes and renew teacher consent before recovery writes. Compare and resolve conflicts between the damaged record, backup, and other verified sources. Only replace the active record after validation and teacher confirmation, while retaining the original, recovered version, decisions, and full audit trail. If a cited source artifact is missing, stop citing it as verified. Course or assessment version changes roll back to S5-S6 for renewed validation.
 
 When an error may have affected released material, quarantine impacted materials, re-audit them, notify the teacher, and record the result and rollback decision. Privacy and learner safety take priority over continuity or convenience.

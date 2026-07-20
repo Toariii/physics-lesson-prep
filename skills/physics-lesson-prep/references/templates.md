@@ -216,6 +216,11 @@ Fields to store:
 Original materials: reference only / copy allowed
 Identifiable information excluded:
 Teacher decision: approve / revise / do not save
+Record classification: pseudonymous / anonymous-minimized
+Retention period and review date:
+Authorized access:
+Export decision and approval:
+Lawful-basis and institution-policy confirmation:
 ```
 
 ## Post-Lesson Reflection
@@ -271,4 +276,29 @@ Low-value methods:
 Recommended next chapters/books:
 Teacher professional judgment to add:
 Archive decision:
+```
+
+## Mastery Update Record
+
+```text
+Concept:
+Previous level:
+New level:
+Evidence:
+Limitations:
+Date:
+Confidence:
+Teacher impression / direct evidence:
+```
+
+## Change History Entry
+
+```text
+Change time:
+Before:
+After:
+Reason:
+Teacher confirmation:
+Course-cycle impact:
+Source/evidence:
 ```

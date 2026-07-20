@@ -27,6 +27,45 @@ function Test-OrderedPhrases {
     return $true
 }
 
+function Get-ReflectionPolicyIssues {
+    param([string]$Content)
+
+    $issues = [System.Collections.Generic.List[string]]::new()
+    $semanticRequirements = @{
+        'pseudonymous records must warn that identifiers and combined quasi-identifiers can re-identify a learner' = '(?is)\bpseudonym(?:ous|ized)\b.*\banonymous identifier\b.*\b(?:does not|cannot)\b.*\banonymity\b.*\bquasi-identifiers?\b.*\bre-identif'
+        'privacy review must minimize and generalize quasi-identifiers' = '(?is)\bdata minimization review\b.*\bquasi-identifiers?\b.*\b(?:coarsen|generalize)\b'
+        'retention, access, export, and policy controls must be explicit' = '(?is)\bretention (?:period|review)\b.*\bauthorized teacher or institution\b.*\bencryption\b.*\blocal law\b.*\blawful basis\b.*\bexports?\b.*\bapproval\b'
+        'next-batch evidence must allow success, error, sticking point, assessment, or observation' = '(?is)\brepresentative learning evidence\b.*\bsuccess\b.*\berror\b.*\bsticking point\b.*\bassessment\b.*\bobservation\b'
+        'homework evidence must be conditional and error-free progress must be allowed' = '(?is)\bhomework evidence only when homework was assigned\b.*\berror-free batch\b.*\badvance\b.*\bNever fabricate\b'
+        'recovery must preserve and hash the damaged original and restore to a new path' = '(?is)\bpreserve the damaged original\b.*\bread-only\b.*\bhash\b.*\bnew path\b.*\bnever overwrite\b'
+        'recovery must validate, preview, reconfirm, resolve conflicts, and retain an audit trail' = '(?is)\bvalidate (?:the )?backup structure and inventory\b.*\bprovenance\b.*\brecovered fields\b.*\bpreview\b.*\brenew teacher consent\b.*\bcompare and resolve conflicts\b.*\bonly replace the active record after\b.*\baudit trail\b'
+        'rollback mappings must preserve S1-S9 routing' = '(?is)\bcourse identity or version returns to S1\b.*\bgoals return to S2\b.*\bprofile returns to S3\b.*\bconditions return to S4\b.*\bsource evidence returns to S5-S6\b.*\bcycle design returns to S7\b.*\breturns to S9\b'
+        'archive must be read-only and renewed work must start a new cycle' = '(?is)\barchive\b.*\bread-only\b.*\bnew cycle\b.*\brather than overwrite\b'
+        'artifact handling must require a copy-or-reference decision' = '(?is)\bartifact\b.*\bcopied or reference only\b'
+    }
+    foreach ($entry in $semanticRequirements.GetEnumerator()) {
+        if ($Content -notmatch $entry.Value) {
+            $issues.Add($entry.Key)
+        }
+    }
+
+    $contradictions = @{
+        'unconditional write without consent' = '(?im)(?:^|[.!?]\s+)(?:always|automatically|immediately)\s+(?:write|save|create)\b(?![^.!?\r\n]{0,100}\b(?:permission|consent|approval)\b)'
+        'identifier falsely guarantees anonymity' = '(?im)\banonymous identifier\b(?![^.!?\r\n]{0,100}\b(?:does not|cannot|never)\b)[^.!?\r\n]{0,100}\b(?:guarantees?|ensures?|makes?)\b[^.!?\r\n]{0,80}\b(?:anonymous|anonymity)\b'
+        'representative error is mandatory' = '(?im)\b(?:requires?|must include|mandatory)\b[^.!?\r\n]{0,80}\brepresentative error\b'
+        'homework evidence is mandatory' = '(?im)(?![^.!?\r\n]{0,160}\bonly when\b)\b(?:requires?|must include|mandatory)\b[^.!?\r\n]{0,80}\bhomework evidence\b'
+        'damaged records may be overwritten' = '(?im)(?<!never )\b(?:overwrite|replace)\b[^.!?\r\n]{0,80}\bdamaged (?:original|record)\b'
+        'archive is mutable' = '(?im)\barchive\b[^.!?\r\n]{0,80}\b(?:mutable|editable|may be changed|can be changed)\b'
+        'exports may proceed without approval' = '(?im)\bexports?\b[^.!?\r\n]{0,100}\bwithout (?:teacher )?approval\b'
+    }
+    foreach ($entry in $contradictions.GetEnumerator()) {
+        if ($Content -match $entry.Value) {
+            $issues.Add("contradiction: $($entry.Key)")
+        }
+    }
+    return @($issues)
+}
+
 try {
     $resolvedSkillPath = (Resolve-Path -LiteralPath $SkillPath -ErrorAction Stop).Path
 }
@@ -613,6 +652,23 @@ Accepted alternative methods
                 $failures.Add("reflection-and-records.md missing exact mastery scale line: $masteryLine")
             }
         }
+
+        foreach ($policyIssue in @(Get-ReflectionPolicyIssues -Content $reflectionContent)) {
+            $failures.Add("reflection-and-records.md policy issue: $policyIssue")
+        }
+
+        $mutants = @(
+            @{ Text = 'An anonymous identifier guarantees anonymity.'; Expected = 'identifier falsely guarantees anonymity' },
+            @{ Text = 'The next batch requires a representative error.'; Expected = 'representative error is mandatory' },
+            @{ Text = 'The next batch must include homework evidence.'; Expected = 'homework evidence is mandatory' },
+            @{ Text = 'Exports may proceed without approval.'; Expected = 'exports may proceed without approval' }
+        )
+        foreach ($mutant in $mutants) {
+            $mutantIssues = @(Get-ReflectionPolicyIssues -Content $mutant.Text)
+            if (-not ($mutantIssues -match [regex]::Escape($mutant.Expected))) {
+                $failures.Add("reflection policy mutant was not rejected: $($mutant.Expected)")
+            }
+        }
     }
 
     $templatesFile = Join-Path $resolvedSkillPath "references/templates.md"
@@ -777,6 +833,27 @@ Accepted alternative methods
             '## Regular-Class Evidence', '## Adjustment Proposal', '## Course Summary'
         ))) {
             $failures.Add("templates.md Task 7 headings are out of order")
+        }
+
+        foreach ($recordTemplateField in @(
+            'Record classification: pseudonymous / anonymous-minimized',
+            'Retention period and review date:', 'Authorized access:',
+            'Export decision and approval:', 'Lawful-basis and institution-policy confirmation:',
+            '## Mastery Update Record', 'Concept:', 'Previous level:', 'New level:',
+            'Limitations:', 'Date:', 'Confidence:',
+            'Teacher impression / direct evidence:',
+            '## Change History Entry', 'Change time:', 'Before:', 'After:', 'Reason:',
+            'Teacher confirmation:', 'Course-cycle impact:', 'Source/evidence:'
+        )) {
+            $fieldPattern = '(?m)^' + [regex]::Escape($recordTemplateField) + '\s*$'
+            if ($templatesContent -notmatch $fieldPattern) {
+                $failures.Add("templates.md missing exact hardened record field: $recordTemplateField")
+            }
+        }
+        if (-not (Test-OrderedPhrases -Content $templatesContent -Phrases @(
+            '## Course Summary', '## Mastery Update Record', '## Change History Entry'
+        ))) {
+            $failures.Add("templates.md hardened record headings are out of order")
         }
     }
 
