@@ -1,4 +1,4 @@
 interface:
-  display_name: Physics Lesson Prep
-  short_description: Guided physics course intake and evidence-based planning
-  default_prompt: Use $physics-lesson-prep to begin with gated intake before planning the physics course.
+  display_name: "Physics Lesson Prep"
+  short_description: "Run gated intake, research, planning, and lesson preparation"
+  default_prompt: "Use $physics-lesson-prep to start a gated intake for my learner or class, verify the course and evidence, and tell me the next required step before preparing lessons."
