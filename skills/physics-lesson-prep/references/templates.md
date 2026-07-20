@@ -79,6 +79,9 @@ Exact information used:
 Cross-validation:
 Replacement or conflict risk:
 Verification status:
+Provenance/original-adapted status:
+License/reuse status:
+Intended use:
 ```
 
 ## Textbook Comparison
@@ -102,5 +105,9 @@ Learner evidence gap:
 Source list:
 Source conflicts:
 Unresolved items:
+Blocking unresolved items and conflicts:
+Non-blocking follow-ups:
 Teacher decision: A confirm / B modify order / C research again / D provide school material
 ```
+
+Decision A confirm is available only when course identity/version, the assessment model where relevant, the primary textbook or knowledge mainline, and every decisive conflict are resolved. If any blocking item remains, Decision A is unavailable; labeled non-blocking follow-ups may remain.

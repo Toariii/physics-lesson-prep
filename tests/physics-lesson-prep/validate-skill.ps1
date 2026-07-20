@@ -6,6 +6,40 @@ $failures = [System.Collections.Generic.List[string]]::new()
 $expectedFilesPath = Join-Path $PSScriptRoot "expected-files.txt"
 $expectedFiles = @(Get-Content -LiteralPath $expectedFilesPath | Where-Object { $_.Trim() })
 
+function Test-RequiredHeadingSequence {
+    param([string[]]$Lines, [string[]]$ExpectedHeadings)
+
+    $headings = @($Lines | Where-Object { $_ -match '^#{1,2}\s' })
+    $previousIndex = -1
+    foreach ($expectedHeading in $ExpectedHeadings) {
+        $matchingIndices = @()
+        for ($index = 0; $index -lt $headings.Count; $index++) {
+            if ($headings[$index] -ceq $expectedHeading) {
+                $matchingIndices += $index
+            }
+        }
+        if ($matchingIndices.Count -ne 1 -or $matchingIndices[0] -le $previousIndex) {
+            return $false
+        }
+        $previousIndex = $matchingIndices[0]
+    }
+    return $true
+}
+
+function Test-OrderedPhrases {
+    param([string]$Content, [string[]]$Phrases)
+
+    $previousIndex = -1
+    foreach ($phrase in $Phrases) {
+        $index = $Content.IndexOf($phrase, [System.StringComparison]::OrdinalIgnoreCase)
+        if ($index -lt 0 -or $index -le $previousIndex) {
+            return $false
+        }
+        $previousIndex = $index
+    }
+    return $true
+}
+
 try {
     $resolvedSkillPath = (Resolve-Path -LiteralPath $SkillPath -ErrorAction Stop).Path
 }
@@ -188,7 +222,7 @@ I will not produce a lesson until the actual course can be identified.
     $curriculumFile = Join-Path $resolvedSkillPath "references/curriculum-research.md"
     if (Test-Path -LiteralPath $curriculumFile -PathType Leaf) {
         $curriculumContent = Get-Content -LiteralPath $curriculumFile -Raw
-        $actualHeadings = @(Get-Content -LiteralPath $curriculumFile | Where-Object { $_ -match '^#{1,2}\s' })
+        $curriculumLines = @(Get-Content -LiteralPath $curriculumFile)
         $expectedHeadings = @(
             '# Curriculum Research',
             '## Research Entry Gate',
@@ -204,21 +238,44 @@ I will not produce a lesson until the actual course can be identified.
             '## Secondary Teaching-Material Search',
             '## Research Failure And Offline Degradation'
         )
-        if (($actualHeadings -join "`n") -cne ($expectedHeadings -join "`n")) {
+        if (-not (Test-RequiredHeadingSequence -Lines $curriculumLines -ExpectedHeadings $expectedHeadings)) {
             $failures.Add("curriculum-research.md headings or order do not match the required structure")
         }
 
         foreach ($researchRule in @(
-            'Track A - Actual course boundary: teacher syllabus -> course/department page -> course code/catalog -> assigned chapters -> lectures/assignments/labs/examination scope.',
-            'Track B - Disciplinary knowledge line: assigned textbook -> teacher references -> authoritative same-level textbooks/monographs -> reputable publisher resources -> professional bodies/open courses.',
             'exactly two or three candidates',
             'teacher confirms one primary textbook before S6 or S7',
             'no formal plan',
             'do not bypass login or paywall',
-            'do not download an unauthorized full textbook or question bank'
+            'do not download an unauthorized full textbook or question bank',
+            'boundary remains provisional',
+            'cannot complete from a sparse course or department page alone'
         )) {
             if ($curriculumContent -notmatch [regex]::Escape($researchRule)) {
                 $failures.Add("curriculum-research.md missing required rule: $researchRule")
+            }
+        }
+        if (-not (Test-OrderedPhrases -Content $curriculumContent -Phrases @(
+            'national curriculum standard',
+            'local education or examination authority',
+            'current official examination documents',
+            'current textbook edition',
+            'school progress and internal scope',
+            'teacher book or publisher',
+            'authoritative teaching organization',
+            'other sources'
+        ))) {
+            $failures.Add("curriculum-research.md domestic evidence order is incorrect")
+        }
+        foreach ($trackPhrase in @(
+            'Track A - Actual course boundary:', 'teacher syllabus', 'course/department page',
+            'course code/catalog', 'assigned chapters', 'lectures/assignments/labs/examination scope',
+            'Track B - Disciplinary knowledge line:', 'assigned textbook', 'teacher references',
+            'authoritative same-level textbooks/monographs', 'reputable publisher resources',
+            'professional bodies/open courses'
+        )) {
+            if ($curriculumContent -notmatch [regex]::Escape($trackPhrase)) {
+                $failures.Add("curriculum-research.md missing double-track element: $trackPhrase")
             }
         }
     }
@@ -226,7 +283,7 @@ I will not produce a lesson until the actual course can be identified.
     $sourceValidationFile = Join-Path $resolvedSkillPath "references/source-validation.md"
     if (Test-Path -LiteralPath $sourceValidationFile -PathType Leaf) {
         $sourceValidationContent = Get-Content -LiteralPath $sourceValidationFile -Raw
-        $actualHeadings = @(Get-Content -LiteralPath $sourceValidationFile | Where-Object { $_ -match '^#{1,2}\s' })
+        $sourceValidationLines = @(Get-Content -LiteralPath $sourceValidationFile)
         $expectedHeadings = @(
             '# Source Validation',
             '## Separate Three Claim Types',
@@ -240,7 +297,7 @@ I will not produce a lesson until the actual course can be identified.
             '## Research Record',
             '## Course Evidence Package'
         )
-        if (($actualHeadings -join "`n") -cne ($expectedHeadings -join "`n")) {
+        if (-not (Test-RequiredHeadingSequence -Lines $sourceValidationLines -ExpectedHeadings $expectedHeadings)) {
             $failures.Add("source-validation.md headings or order do not match the required structure")
         }
 
@@ -248,12 +305,21 @@ I will not produce a lesson until the actual course can be identified.
             'course fact: what the target course requires',
             'disciplinary fact: what physics and mathematics establish',
             'teaching recommendation: a pedagogical choice for this learner',
-            'A - decisive official/assigned',
-            'B - authoritative professional',
-            'C - screened practice',
+            'A - decisive official/assigned evidence',
+            'B - authoritative professional evidence',
+            'C - screened practice material',
             'D - lead only',
             'search-result snippets are never evidence',
-            'WorldCat'
+            'WorldCat',
+            'assigned textbook never decides official assessment requirements',
+            'not physical truth',
+            'No evidence tier is automatically decisive',
+            'Within the same tier',
+            'provenance and original/adapted status',
+            'license and reuse status',
+            'intended use',
+            'Classify every unresolved item and conflict as blocking or non-blocking',
+            'If any blocker remains, Decision A is unavailable'
         )) {
             if ($sourceValidationContent -notmatch [regex]::Escape($sourceRule)) {
                 $failures.Add("source-validation.md missing required rule: $sourceRule")
@@ -307,25 +373,35 @@ I will not produce a lesson until the actual course can be identified.
             'URL or bibliographic record:', 'Published/updated or edition year:',
             'Access date:', 'Course/version applicability:', 'Exact information used:',
             'Cross-validation:', 'Replacement or conflict risk:', 'Verification status:',
+            'Provenance/original-adapted status:', 'License/reuse status:', 'Intended use:',
             '## Textbook Comparison',
-            '| Candidate | Author | Publisher | ISBN | Edition | Chapters | Level | Strengths | Limitations | Notation differences | Adoption evidence |',
             'Teacher decision: choose one primary textbook / request new candidates / provide assigned book',
             '## Course Evidence Package',
             'Course identity and version:', 'School Course Boundary:', 'Textbook Knowledge Mainline:',
             'Required / recommended / excluded content:', 'Prerequisite relationships:',
             'Assessment and marking requirements:', 'Official, school, and recommended sequence:',
             'Learner evidence gap:', 'Source list:', 'Source conflicts:', 'Unresolved items:',
-            'Teacher decision: A confirm / B modify order / C research again / D provide school material'
+            'Blocking unresolved items and conflicts:', 'Non-blocking follow-ups:',
+            'Teacher decision: A confirm / B modify order / C research again / D provide school material',
+            'If any blocking item remains, Decision A is unavailable'
         )) {
             if ($templatesContent -notmatch [regex]::Escape($researchTemplateField)) {
                 $failures.Add("templates.md missing Task 4 field: $researchTemplateField")
             }
         }
 
-        $tableHeader = [regex]::Escape('| Candidate | Author | Publisher | ISBN | Edition | Chapters | Level | Strengths | Limitations | Notation differences | Adoption evidence |')
-        $tableSeparator = [regex]::Escape('|---|---|---|---|---|---|---|---|---|---|---|')
-        if ($templatesContent -notmatch "(?m)^$tableHeader\r?\n$tableSeparator$") {
-            $failures.Add("templates.md Textbook Comparison table must preserve the exact empty extensible structure")
+        $textbookSection = ($templatesContent -split '(?m)^## Textbook Comparison\s*$', 2)[1]
+        if ($textbookSection) {
+            $textbookSection = ($textbookSection -split '(?m)^##\s+', 2)[0]
+        }
+        $tableHeaderLine = @($textbookSection -split '\r?\n' | Where-Object { $_ -match '^\|' } | Select-Object -First 1)
+        foreach ($requiredColumn in @(
+            'Candidate', 'Author', 'Publisher', 'ISBN', 'Edition', 'Chapters', 'Level',
+            'Strengths', 'Limitations', 'Notation differences', 'Adoption evidence'
+        )) {
+            if ($tableHeaderLine.Count -ne 1 -or $tableHeaderLine[0] -notmatch "(?i)(?:^|\|)\s*$([regex]::Escape($requiredColumn))\s*(?:\||$)") {
+                $failures.Add("templates.md Textbook Comparison missing column: $requiredColumn")
+            }
         }
     }
 

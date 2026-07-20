@@ -10,7 +10,7 @@ Before browsing, create a Research Task Card with the anonymous record, course a
 
 ## Domestic Middle And High School Route
 
-Use this evidence order: national curriculum standard -> local education or examination authority -> current textbook edition -> school progress and internal scope -> official examination documents, samples, and marking -> teacher book or publisher -> authoritative teaching organization -> other sources.
+Use this evidence order: national curriculum standard -> local education or examination authority -> current official examination documents, updates, samples, and marking -> current textbook edition -> school progress and internal scope -> teacher book or publisher -> authoritative teaching organization -> other sources.
 
 Confirm grade, module, publisher, edition, region, examination and year, mathematics prerequisites, required experiments, and local teaching sequence. Never generalize one region's sequence, examination scope, or textbook use to another region.
 
@@ -32,9 +32,11 @@ Confirm the awarding body, qualification, specification code and issue, examinat
 
 ## University Double-Track Research
 
-Use a double-track investigation. A sparse website is expected: the website establishes course identity and boundary, while books establish the disciplinary knowledge line. Another university cannot prove the target requirement.
+Use a double-track investigation. A sparse university page is expected and may establish identity and a broad course description only. The actual course boundary remains provisional until the teacher syllabus, assigned scope, lectures, assignments, laboratories, or examination evidence confirms it. Books establish the disciplinary knowledge line. Another university cannot prove the target requirement.
 
 Track A - Actual course boundary: teacher syllabus -> course/department page -> course code/catalog -> assigned chapters -> lectures/assignments/labs/examination scope.
+
+Track A cannot complete from a sparse course or department page alone.
 
 Track B - Disciplinary knowledge line: assigned textbook -> teacher references -> authoritative same-level textbooks/monographs -> reputable publisher resources -> professional bodies/open courses.
 

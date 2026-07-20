@@ -10,12 +10,18 @@ Never blur these claim types. Label each recorded claim before judging its evide
 
 ## A-D Evidence Levels
 
-- A - decisive official/assigned: current official curriculum, specification, assessment document, school requirement, teacher syllabus, or assigned textbook.
-- B - authoritative professional: recognized professional body, reputable academic publisher, authoritative same-level reference, or qualified institutional resource.
-- C - screened practice: teaching material independently audited for physics accuracy and pedagogical fitness.
+- A - decisive official/assigned evidence within the authority appropriate to the claim.
+- B - authoritative professional evidence within the relevant discipline or practice.
+- C - screened practice material independently audited for physics accuracy and pedagogical fitness.
 - D - lead only: search result, aggregator, informal post, or unverified summary used only to locate stronger evidence.
 
-Lower evidence cannot override higher evidence. Level C requires independent physics and pedagogy audits. Level D only finds sources and never supports a final claim.
+For a course fact, use this precedence: current official authority, specification, and assessment updates -> target school, university, or teacher local requirements for actual implementation boundaries unless an official rule prohibits them -> assigned textbook only for taught chapters, notation, and depth. An assigned textbook never decides official assessment requirements.
+
+For a disciplinary fact, physical correctness and current authoritative disciplinary consensus or reference may correct errors in official, local, or textbook material. After an error is flagged, the assigned textbook defines class notation and intended depth, not physical truth.
+
+For a teaching recommendation, evaluate learner fit, diagnostic evidence, feasibility, and pedagogical support. No evidence tier is automatically decisive.
+
+The A-D labels describe evidence quality, not one global override order. Compare sources only within the correct claim type and authority. Within the same tier, resolve conflicts using applicability, currency, specificity, originality, and corroboration; if these do not decide the issue, expose the conflict for teacher judgment. Level C always requires independent physics and pedagogy audits. Level D only finds sources and never supports a final claim.
 
 ## Web Page Verification
 
@@ -43,10 +49,10 @@ Record source, year or series, edition, item identifier, original or adapted sta
 
 ## Research Record
 
-For every source, record claim type, evidence level, title, institution or author, URL or bibliographic record, publication/update or edition year, access date, course/version applicability, exact information used, cross-validation, replacement or conflict risk, verification status, provenance, license, and intended use.
+For every source, record claim type, evidence level, title, institution or author, URL or bibliographic record, publication/update or edition year, access date, course/version applicability, exact information used, cross-validation, replacement or conflict risk, verification status, provenance and original/adapted status, license and reuse status, and intended use.
 
 ## Course Evidence Package
 
-The Course Evidence Package records course identity and version; textbook and progress; required, recommended, and excluded content; prerequisites; abilities and assessment; official, school, and recommended order; learner evidence gap; sources; unresolved items; and conflicts.
+The Course Evidence Package records course identity and version; textbook and progress; required, recommended, and excluded content; prerequisites; abilities and assessment; official, school, and recommended order; learner evidence gap; sources; unresolved items; and conflicts. Classify every unresolved item and conflict as blocking or non-blocking.
 
-For a university course, keep School Course Boundary separate from Textbook Knowledge Mainline. Offer teacher decisions: A confirm and proceed to S7; B modify order and remain in S6 or return to S5; C research again in S5; D wait in S5 for school material.
+For a university course, keep School Course Boundary separate from Textbook Knowledge Mainline. Decision A confirm and proceed to S7 is available only when course identity and version, the assessment model where relevant, the primary textbook or knowledge mainline, and all decisive conflicts are resolved. Non-blocking follow-ups may remain if clearly labeled. If any blocker remains, Decision A is unavailable. Decision B modifies order and remains in S6 or returns to S5; C researches again in S5; D waits in S5 for school material.
