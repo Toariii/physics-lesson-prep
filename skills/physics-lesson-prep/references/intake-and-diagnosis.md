@@ -18,11 +18,13 @@ First require the teacher to choose one route for this request:
 
 Also confirm the teaching setting and whether the teacher permits the supplied information to be used for planning. Permission to discuss or process information is distinct from permission to save it locally. Ask for save permission only when a file write is proposed.
 
-Use anonymous IDs such as `PHY-2026-014`, `HS-IB-PHY-007`, or `UNI-MECH-021`. IDs may encode a broad course family and sequence number but must not contain names, initials, student numbers, email addresses, phone numbers, exact birth dates, or other personal identifiers.
+Use anonymous IDs such as `PHY-2026-014`, `HS-IB-PHY-007`, or `UNI-MECH-021`. IDs may encode a broad course family and sequence number but must not contain personal identifiers.
+
+Do not collect or store real names, contacts, home addresses, credentials, medical documents, unrelated family information, initials, student numbers, email addresses, phone numbers, or exact birth dates.
 
 ## S1 Domestic School Intake
 
-Collect the common required course identity fields:
+The following common course identity fields are required for all routes, including domestic school, international course, and university course:
 
 - country or region;
 - school or program type and learner stage or grade;
@@ -42,7 +44,7 @@ For cross-system cases, record each system separately and state which one govern
 
 ## S1 University Course Intake
 
-Collect the institution or an anonymized link to its official course information, department, program stage, formal course name and code, credits or contact hours, prerequisites, syllabus, assigned textbook and edition, assessment structure, and whether delivery is theory, tutorial, laboratory, or mixed.
+After collecting every common required field above, also collect the institution or an anonymized link to its official course information, department, program stage, formal course name and code, credits or contact hours, prerequisites, syllabus, assigned textbook and edition, assessment structure, and whether delivery is theory, tutorial, laboratory, or mixed.
 
 A sparse department or catalog website is insufficient by itself. If it omits the syllabus, weekly scope, prerequisite detail, assessment, or assigned text, request teacher-provided course documents or mark those fields unresolved. Do not reconstruct a university course from its title alone.
 
@@ -50,10 +52,10 @@ A sparse department or catalog website is insufficient by itself. If it omits th
 
 Require exactly one primary goal, no more than two secondary goals, a target date, and an observable success criterion. Use the route-specific questions below.
 
-- **Score improvement:** Which examination, paper, or assessed task is targeted? What is the current evidenced level and target score or grade? Which recent losses, question types, timing constraints, and marking criteria matter? What dated assessment will show success?
-- **Synchronized consolidation:** Which school lessons, textbook sections, assignments, or laboratory work must tutoring track? What is the school's current and next progress? Where does understanding or retention break down? What weekly evidence will show the learner can keep pace independently?
-- **Advance preparation:** What future unit, course, or transition is being prepared for, and by what date? Which prerequisites are already evidenced? How far ahead is useful without conflicting with the school's notation or sequence? What performance on a preview task will count as readiness?
-- **Competition or enrichment:** Which competition, selection level, enrichment theme, or open-ended capability is intended? What are the learner's mathematics, modeling, proof, experimental, and programming foundations? Is the aim participation, qualification, ranking, or sustained inquiry? What dated product or performance will demonstrate success?
+- **Score improvement:** Which examination, paper, or assessed task is targeted? What is the current evidenced level and target score or grade? Which recent losses, question types, timing constraints, marking criteria, and official marking evidence matter? What dated assessment will show success?
+- **Synchronized consolidation:** Which school lessons, textbook sections, assignments, or laboratory work must tutoring track? What is the school's current and next progress? Which upcoming assessments and homework needs matter? Where is the gap between classroom performance and independent work, and where does understanding or retention break down? What weekly evidence will show the learner can keep pace independently?
+- **Advance preparation:** What future unit, course, or transition is being prepared for, and by what date? What is the required readiness level? Which prerequisites are already evidenced, what is the future textbook sequence, and what mathematics limits apply? How far ahead is useful without conflicting with the school's notation or sequence? What performance on a preview task will count as readiness?
+- **Competition or enrichment:** Which competition, selection level, enrichment theme, or open-ended capability is intended? What prior competition or enrichment experience exists? What time is available, and does the teacher permit work beyond the school curriculum? What are the learner's mathematics, modeling, proof, experimental, and programming foundations? Is the aim participation, qualification, ranking, or sustained inquiry? What dated product or performance will demonstrate success?
 
 Record secondary goals only when they can be pursued without obscuring the primary route. Convert vague aims such as “improve physics” into a dated, observable outcome.
 
@@ -139,19 +141,21 @@ For mixed delivery, record the online, in-person, tutorial, theory, and laborato
 
 Skip a question when the exact field is already confirmed by a credible artifact or prior answer. Example: if an uploaded current syllabus states `Pearson Edexcel International A Level Physics, WPH14/01, January 2027` and the teacher confirms it governs the learner, do not ask again for qualification, code, version, year, or series; ask only unresolved school-order or teaching-condition questions.
 
-If the request is “Prepare tomorrow's rigid-body rotation lesson” but course identity, learner evidence, and delivery constraints are insufficient, respond with no lesson and exactly this structure:
+If the request is “Prepare a lesson on rigid-body motion” but course identity is insufficient, respond exactly as follows:
 
 ```text
-Course record: Temporary consultation
-Current stage: S1 - course identity incomplete
-Confirmed: Topic request is rigid-body rotation for tomorrow
-Missing: Actual course boundary, learner readiness evidence, and teaching conditions
-This turn: Resolve the minimum blockers; no lesson generated
-Next gate: Confirm S1, then continue through goal, evidence, and conditions gates
+Course record: Not created
+Current stage: S1 - learner and course identity
+Confirmed: Topic is rigid-body motion
+Missing: Learner stage, actual course, curriculum/course code, current module, teaching context
+This turn: Collect minimum course identity
+Next gate: Identify a traceable course boundary
 
-1. What is the exact course, system or university course code, current module, and teaching/exam language?
-2. What recent work shows the learner's readiness in torque, angular momentum, rotational inertia, vectors, and required calculus?
-3. How long is tomorrow's session, what is the class size and delivery mode, and what equipment, board/projection, calculator, or simulation access is available?
+1. What are the country/region and grade or university stage?
+2. What is the full course, system, exam board, or course code?
+3. What current textbook, syllabus, official course page, or table of contents identifies the current module?
+
+No lesson is generated until the minimum course identity is confirmed.
 ```
 
 When confirmed facts conflict, do not reconcile them silently. Use this output format:

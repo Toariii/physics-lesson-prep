@@ -18,34 +18,20 @@ Next gate:
 ```text
 Course Requirements Confirmation Sheet
 
-Record route: New anonymous record | Existing record | Temporary consultation
-Anonymous record ID:
-Planning-use permission:
-Save permission:
-Teaching setting:
-
-Country/region:
-School/program type:
-Learner stage:
-Full course name:
-System/exam board/university program:
-Qualification/level/course code:
-Version/exam year/series:
-Current module/topic:
-Teaching language:
-Examination language:
-Textbook/edition:
-Local or school teaching order/progress:
-Assessment structure/exam goal:
-
-Primary goal:
-Secondary goals (maximum two):
-Target date:
-Observable success criterion:
-
-Evidence received:
-Unresolved conflicts:
-Teacher confirmations required:
+Anonymous record:
+Course identity:
+Primary and secondary goals:
+Target date and success criteria:
+Learning evidence:
+Lesson duration and weekly frequency:
+Available weeks and deadlines:
+Teaching mode and proportions:
+Setting, class size, and delivery:
+Homework capacity:
+Equipment and access:
+Required outputs:
+Unresolved conditions:
+Teacher decision: confirm / revise / provide missing information
 ```
 
 ## Diagnostic Blueprint
@@ -53,27 +39,20 @@ Teacher confirmations required:
 ```text
 Diagnostic Blueprint
 
-Purpose/decision:
+Diagnostic purpose:
 Course boundary:
-Excluded content:
-Prerequisites:
-Core concepts/applications:
+Prerequisites covered:
+Core content covered:
 Ability dimensions:
 Duration:
-Item count:
-Item formats:
-Permitted tools:
-Suggested proportions:
-Scoring and partial credit:
-Classification thresholds:
-Continuation evidence:
-Adjustments and rationale:
-Unresolved questions:
-Teacher confirmation: Pending | Confirmed on [date]
+Item count and format:
+Scoring and interpretation:
+Evidence required to continue:
+Teacher decision: confirm blueprint / revise blueprint
 ```
 
 ## Learner Evidence Profile
 
-| Dimension or scope | Status | Evidence and date | Error taxonomy/pattern | Prompt or transfer behavior | Confidence and reason | Instructional implication | Next evidence |
-|---|---|---|---|---|---|---|---|
-| [knowledge or skill] | mastered / unstable / not learned / prerequisite gap / math/language bottleneck | [artifact, item, observation] | [concept, method/model, representation, math, experiment/data, assessed communication, learning behavior] | [independent, prompted, corrected, transferred] | high / medium / low: [reason] | [planning consequence] | [needed check] |
+| Dimension | Status | Evidence | Repeated pattern | Teaching impact | Confidence |
+|---|---|---|---|---|---|
+| [knowledge or skill] | mastered / unstable / not learned / prerequisite gap / math/language bottleneck | [artifact, item, or observation] | [first, repeated, prompt-correctable, persistent, complex-only, prerequisite, or language-strategy] | [planning consequence] | high / medium / low: [reason] |
