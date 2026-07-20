@@ -72,6 +72,13 @@ if ($resolvedSkillPath) {
     foreach ($requiredPhrase in @(
         'primary goal',
         'diagnostic blueprint',
+        'one to five',
+        'carelessness',
+        'score improvement',
+        'synchronized consolidation',
+        'advance preparation',
+        'competition or enrichment',
+        'Course Requirements Confirmation Sheet',
         'two or three',
         'primary textbook',
         'double-track',
