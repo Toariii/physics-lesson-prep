@@ -1,7 +1,5 @@
 # Templates
 
-Use these initial templates without inventing missing facts. Mark unresolved values `Unconfirmed` and provisional judgments `Provisional`.
-
 ## Turn Status Header
 
 ```text
