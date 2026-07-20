@@ -83,6 +83,10 @@ Use this exact evidence priority, highest first:
 
 Prefer recent, course-aligned, independently completed evidence. Record the date, source, conditions, scope, and whether help was available. Self-confidence or self-reported familiarity is not sole evidence for mastery or placement.
 
+Completed course or textbook progress is context and coverage evidence: progress establishes exposure and scope only and can never alone complete S3 or establish mastery. To complete S3, require at least one performance artifact, teacher-observed performance, or completed diagnostic. Self-assessment is supplementary and cannot replace performance evidence.
+
+Before the teacher uploads tests, assignments, reports, or rubrics, ask them to redact names, student IDs, contacts, school account identifiers, and information about other students, and request only the relevant pages. If personal information is incidentally supplied, do not reproduce or store it: extract only teaching-relevant data and ask for an anonymized replacement before saving. No file delete unless authorized.
+
 ## Error Analysis Taxonomy
 
 Classify an error by the earliest defensible cause and preserve the evidence:
@@ -126,6 +130,12 @@ Do not reduce the result to a total score. For each relevant knowledge or skill 
 
 Separate physics understanding from mathematical execution and language or assessment-expression limits. A high total with a persistent prerequisite gap and a low total caused mainly by language require different plans.
 
+The compact Learner Evidence Profile in `templates.md` is a summary only. When a diagnostic is used, pair it with a Diagnostic Observation Detail record:
+
+| Dimension | Prompt dependence | Transfer | Correction behavior | Instructional implication | Next evidence |
+|---|---|---|---|---|---|
+| [knowledge or skill] | [independent or prompt type needed] | [near, varied, or novel context] | [self-corrected, prompt-corrected, or persistent] | [specific teaching response] | [artifact or observation required] |
+
 ## S4 Teaching Conditions
 
 Collect the minimum delivery conditions:
@@ -140,6 +150,8 @@ For mixed delivery, record the online, in-person, tutorial, theory, and laborato
 ## Smart Skip And Conflict Rules
 
 Skip a question when the exact field is already confirmed by a credible artifact or prior answer. Example: if an uploaded current syllabus states `Pearson Edexcel International A Level Physics, WPH14/01, January 2027` and the teacher confirms it governs the learner, do not ask again for qualification, code, version, year, or series; ask only unresolved school-order or teaching-condition questions.
+
+Use the exact S1 example below only after S0 has already been resolved as temporary consultation or new/existing record choice. If S0 is unresolved, ask the S0 choice first and do not use the example.
 
 If the request is “Prepare a lesson on rigid-body motion” but course identity is insufficient, respond exactly as follows:
 

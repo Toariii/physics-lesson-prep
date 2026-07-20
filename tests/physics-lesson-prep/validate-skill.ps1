@@ -93,6 +93,121 @@ if ($resolvedSkillPath) {
         }
     }
 
+    $intakeFile = Join-Path $resolvedSkillPath "references/intake-and-diagnosis.md"
+    if (Test-Path -LiteralPath $intakeFile -PathType Leaf) {
+        $intakeContent = Get-Content -LiteralPath $intakeFile -Raw
+        $actualHeadings = @(Get-Content -LiteralPath $intakeFile | Where-Object { $_ -match '^#{1,2}\s' })
+        $expectedHeadings = @(
+            '# Intake And Diagnosis',
+            '## Questioning Rules',
+            '## S0 Anonymous Record Intake',
+            '## S1 Domestic School Intake',
+            '## S1 International Course Intake',
+            '## S1 University Course Intake',
+            '## S2 Four Goal Routes',
+            '## Multiple-Goal Priority And Conflict Rules',
+            '## S3 Evidence Priority',
+            '## Error Analysis Taxonomy',
+            '## Diagnostic Blueprint',
+            '## Diagnostic Result Profile',
+            '## S4 Teaching Conditions',
+            '## Smart Skip And Conflict Rules'
+        )
+        if (($actualHeadings -join "`n") -cne ($expectedHeadings -join "`n")) {
+            $failures.Add("intake-and-diagnosis.md headings or order do not match the required structure")
+        }
+
+        $rigidBodyFixture = @'
+Course record: not created
+Current stage: S1 learner and course identity
+Confirmed: Topic is rigid-body motion
+Missing: learner stage, actual course, curriculum or course code, current module, teaching context
+This turn: collect the minimum course identity
+Next gate: identify a traceable course boundary
+
+Please provide:
+1. The learner's country/region and grade or university stage.
+2. The full course name, system/examination board, or university course code.
+3. The current textbook, syllabus, course page, or table of contents.
+
+I will not produce a lesson until the actual course can be identified.
+'@ -replace "`r`n", "`n"
+        $normalizedIntake = $intakeContent -replace "`r`n", "`n"
+        if (-not $normalizedIntake.Contains($rigidBodyFixture.Trim())) {
+            $failures.Add("intake-and-diagnosis.md missing the exact rigid-body fixture")
+        }
+
+        foreach ($intakeRule in @(
+            'if S0 is unresolved',
+            'temporary consultation or new/existing record choice',
+            'redact names',
+            'student IDs',
+            'school account identifiers',
+            'other students',
+            'relevant pages',
+            'anonymized replacement before saving',
+            'No file delete unless authorized',
+            'progress establishes exposure and scope only',
+            'can never alone complete S3 or establish mastery',
+            'performance artifact',
+            'teacher-observed performance',
+            'self-assessment is supplementary',
+            'official marking evidence',
+            'upcoming assessments and homework needs',
+            'gap between classroom performance and independent work',
+            'required readiness level',
+            'future textbook sequence',
+            'mathematics limits',
+            'prior competition or enrichment experience',
+            'permit work beyond the school curriculum',
+            'Diagnostic Observation Detail',
+            'prompt dependence',
+            'transfer',
+            'correction behavior',
+            'instructional implication',
+            'next evidence'
+        )) {
+            if ($intakeContent -notmatch [regex]::Escape($intakeRule)) {
+                $failures.Add("intake-and-diagnosis.md missing required rule: $intakeRule")
+            }
+        }
+    }
+
+    $templatesFile = Join-Path $resolvedSkillPath "references/templates.md"
+    if (Test-Path -LiteralPath $templatesFile -PathType Leaf) {
+        $templatesContent = Get-Content -LiteralPath $templatesFile -Raw
+        if ($templatesContent -notmatch '\A# Templates\r?\n\r?\n## Turn Status Header(?:\r?\n|$)') {
+            $failures.Add("templates.md must begin with the exact initial heading prefix")
+        }
+
+        foreach ($templateField in @(
+            'Course record:', 'Current stage:', 'Confirmed:', 'Missing:', 'This turn:', 'Next gate:',
+            'Anonymous record:', 'Course identity:', 'Primary and secondary goals:',
+            'Target date and success criteria:', 'Learning evidence:',
+            'Lesson duration and weekly frequency:', 'Available weeks and deadlines:',
+            'Teaching mode and proportions:', 'Setting, class size, and delivery:',
+            'Homework capacity:', 'Equipment and access:', 'Required outputs:',
+            'Unresolved conditions:', 'Teacher decision: confirm / revise / provide missing information',
+            'Diagnostic purpose:', 'Course boundary:', 'Prerequisites covered:',
+            'Core content covered:', 'Ability dimensions:', 'Duration:',
+            'Item count and format:', 'Scoring and interpretation:',
+            'Evidence required to continue:', 'Teacher decision: confirm blueprint / revise blueprint',
+            '| Dimension | Status | Evidence | Repeated pattern | Teaching impact | Confidence |'
+        )) {
+            if ($templatesContent -notmatch [regex]::Escape($templateField)) {
+                $failures.Add("templates.md missing exact initial field: $templateField")
+            }
+        }
+
+        $profileSection = ($templatesContent -split '(?m)^## Learner Evidence Profile\s*$', 2)[1]
+        if ($profileSection) {
+            $profileRows = @($profileSection -split '\r?\n' | Where-Object { $_ -match '^\|' })
+            if ($profileRows.Count -ne 2) {
+                $failures.Add("Learner Evidence Profile must contain only its header and separator rows")
+            }
+        }
+    }
+
     $agentFile = Join-Path $resolvedSkillPath "agents/openai.yaml"
     if (Test-Path -LiteralPath $agentFile -PathType Leaf) {
         $agentContent = Get-Content -LiteralPath $agentFile -Raw
