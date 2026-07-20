@@ -151,7 +151,7 @@ For mixed delivery, record the online, in-person, tutorial, theory, and laborato
 
 Skip a question when the exact field is already confirmed by a credible artifact or prior answer. Example: if an uploaded current syllabus states `Pearson Edexcel International A Level Physics, WPH14/01, January 2027` and the teacher confirms it governs the learner, do not ask again for qualification, code, version, year, or series; ask only unresolved school-order or teaching-condition questions.
 
-Use the exact S1 example below only after S0 has already been resolved as temporary consultation or new/existing record choice. If S0 is unresolved, ask the S0 choice first and do not use the example.
+Use the exact S1 example below only after S0 has been resolved as a temporary consultation or a new unsaved anonymous record that has not yet been created or saved. If S0 is unresolved, ask the S0 choice first and do not use the example. Do not use this fixture for an existing record; an existing-record response must show its anonymous ID and current state.
 
 If the request is “Prepare a lesson on rigid-body motion” but course identity is insufficient, respond exactly as follows:
 

@@ -139,7 +139,11 @@ I will not produce a lesson until the actual course can be identified.
 
         foreach ($intakeRule in @(
             'if S0 is unresolved',
-            'temporary consultation or new/existing record choice',
+            'temporary consultation',
+            'new unsaved anonymous record',
+            'has not yet been created or saved',
+            'Do not use this fixture for an existing record',
+            'existing-record response must show its anonymous ID and current state',
             'redact names',
             'student IDs',
             'school account identifiers',
