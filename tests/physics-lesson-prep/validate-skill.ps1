@@ -41,7 +41,7 @@ if ($resolvedSkillPath) {
             $failures.Add("SKILL.md must be 300 lines or fewer")
         }
         foreach ($state in @('S0', 'S9')) {
-            if ($skillContent -notmatch "(?<![A-Za-z0-9])$state(?![0-9])") {
+            if ($skillContent -notmatch "(?<![A-Za-z0-9])$state(?![A-Za-z0-9])") {
                 $failures.Add("SKILL.md missing required state: $state")
             }
         }
