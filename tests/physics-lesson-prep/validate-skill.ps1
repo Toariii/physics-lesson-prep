@@ -27,16 +27,30 @@ if ($resolvedSkillPath) {
         $skillContent = Get-Content -LiteralPath $skillFile -Raw
         $skillLines = @(Get-Content -LiteralPath $skillFile)
 
-        if ($skillContent -notmatch '(?ms)\A---\s*.*?^name:\s*physics-lesson-prep\s*$.*?^description:\s*\S.+?^---\s*$') {
+        $frontmatterMatch = [regex]::Match(
+            $skillContent,
+            '(?m)\A---\r?\n(?<frontmatter>(?:(?!^---\s*$)[^\r\n]*(?:\r?\n|$))*)^---\s*(?:\r?\n|$)'
+        )
+        $frontmatterIsValid = $frontmatterMatch.Success -and
+            $frontmatterMatch.Groups['frontmatter'].Value -match '(?m)^name:\s*physics-lesson-prep\s*$' -and
+            $frontmatterMatch.Groups['frontmatter'].Value -match '(?m)^description:\s*\S.*$'
+        if (-not $frontmatterIsValid) {
             $failures.Add("SKILL.md frontmatter must define name and description")
         }
         if ($skillLines.Count -gt 300) {
             $failures.Add("SKILL.md must be 300 lines or fewer")
         }
-        foreach ($requiredText in @('S0', 'S9', 'Do not generate formal', 'Current stage')) {
-            if ($skillContent -notmatch [regex]::Escape($requiredText)) {
-                $failures.Add("SKILL.md missing required text: $requiredText")
+        foreach ($state in @('S0', 'S9')) {
+            if ($skillContent -notmatch "(?<![A-Za-z0-9])$state(?![0-9])") {
+                $failures.Add("SKILL.md missing required state: $state")
             }
+        }
+        if ($skillContent -notmatch '(?im)^#{1,6}\s+Non-Negotiable Gate\s*$' -or
+            $skillContent -notmatch '(?im)^\s*(?:[-*+]\s+)?Do not generate formal\b.*$') {
+            $failures.Add("SKILL.md missing structured formal-material gate")
+        }
+        if ($skillContent -notmatch '(?im)^Current stage:\s*.*$') {
+            $failures.Add("SKILL.md missing status field: Current stage:")
         }
         if ($skillContent -match '(?i)\bTODO\b|\bTBD\b|\bFIXME\b|\[TODO') {
             $failures.Add("SKILL.md contains a placeholder")
