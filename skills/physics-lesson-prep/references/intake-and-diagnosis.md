@@ -144,18 +144,19 @@ Skip a question when the exact field is already confirmed by a credible artifact
 If the request is “Prepare a lesson on rigid-body motion” but course identity is insufficient, respond exactly as follows:
 
 ```text
-Course record: Not created
-Current stage: S1 - learner and course identity
+Course record: not created
+Current stage: S1 learner and course identity
 Confirmed: Topic is rigid-body motion
-Missing: Learner stage, actual course, curriculum/course code, current module, teaching context
-This turn: Collect minimum course identity
-Next gate: Identify a traceable course boundary
+Missing: learner stage, actual course, curriculum or course code, current module, teaching context
+This turn: collect the minimum course identity
+Next gate: identify a traceable course boundary
 
-1. What are the country/region and grade or university stage?
-2. What is the full course, system, exam board, or course code?
-3. What current textbook, syllabus, official course page, or table of contents identifies the current module?
+Please provide:
+1. The learner's country/region and grade or university stage.
+2. The full course name, system/examination board, or university course code.
+3. The current textbook, syllabus, course page, or table of contents.
 
-No lesson is generated until the minimum course identity is confirmed.
+I will not produce a lesson until the actual course can be identified.
 ```
 
 When confirmed facts conflict, do not reconcile them silently. Use this output format:

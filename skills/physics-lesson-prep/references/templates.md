@@ -16,8 +16,6 @@ Next gate:
 ## Course Requirements Confirmation Sheet
 
 ```text
-Course Requirements Confirmation Sheet
-
 Anonymous record:
 Course identity:
 Primary and secondary goals:
@@ -37,8 +35,6 @@ Teacher decision: confirm / revise / provide missing information
 ## Diagnostic Blueprint
 
 ```text
-Diagnostic Blueprint
-
 Diagnostic purpose:
 Course boundary:
 Prerequisites covered:
@@ -55,4 +51,3 @@ Teacher decision: confirm blueprint / revise blueprint
 
 | Dimension | Status | Evidence | Repeated pattern | Teaching impact | Confidence |
 |---|---|---|---|---|---|
-| [knowledge or skill] | mastered / unstable / not learned / prerequisite gap / math/language bottleneck | [artifact, item, or observation] | [first, repeated, prompt-correctable, persistent, complex-only, prerequisite, or language-strategy] | [planning consequence] | high / medium / low: [reason] |
