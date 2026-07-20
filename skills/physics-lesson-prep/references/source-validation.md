@@ -12,7 +12,7 @@ Never blur these claim types. Label each recorded claim before judging its evide
 
 - A - decisive official/assigned evidence within the authority appropriate to the claim.
 - B - authoritative professional evidence within the relevant discipline or practice.
-- C - screened practice material independently audited for physics accuracy and pedagogical fitness.
+- C - screened teaching practice: material independently audited for physics accuracy and pedagogical fitness.
 - D - lead only: search result, aggregator, informal post, or unverified summary used only to locate stronger evidence.
 
 For a course fact, use this precedence: current official authority, specification, and assessment updates -> target school, university, or teacher local requirements for actual implementation boundaries unless an official rule prohibits them -> assigned textbook only for taught chapters, notation, and depth. An assigned textbook never decides official assessment requirements.

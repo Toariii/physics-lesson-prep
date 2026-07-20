@@ -6,24 +6,11 @@ $failures = [System.Collections.Generic.List[string]]::new()
 $expectedFilesPath = Join-Path $PSScriptRoot "expected-files.txt"
 $expectedFiles = @(Get-Content -LiteralPath $expectedFilesPath | Where-Object { $_.Trim() })
 
-function Test-RequiredHeadingSequence {
+function Test-ExactHeadings {
     param([string[]]$Lines, [string[]]$ExpectedHeadings)
 
     $headings = @($Lines | Where-Object { $_ -match '^#{1,2}\s' })
-    $previousIndex = -1
-    foreach ($expectedHeading in $ExpectedHeadings) {
-        $matchingIndices = @()
-        for ($index = 0; $index -lt $headings.Count; $index++) {
-            if ($headings[$index] -ceq $expectedHeading) {
-                $matchingIndices += $index
-            }
-        }
-        if ($matchingIndices.Count -ne 1 -or $matchingIndices[0] -le $previousIndex) {
-            return $false
-        }
-        $previousIndex = $matchingIndices[0]
-    }
-    return $true
+    return ($headings -join "`n") -ceq ($ExpectedHeadings -join "`n")
 }
 
 function Test-OrderedPhrases {
@@ -238,7 +225,7 @@ I will not produce a lesson until the actual course can be identified.
             '## Secondary Teaching-Material Search',
             '## Research Failure And Offline Degradation'
         )
-        if (-not (Test-RequiredHeadingSequence -Lines $curriculumLines -ExpectedHeadings $expectedHeadings)) {
+        if (-not (Test-ExactHeadings -Lines $curriculumLines -ExpectedHeadings $expectedHeadings)) {
             $failures.Add("curriculum-research.md headings or order do not match the required structure")
         }
 
@@ -267,15 +254,12 @@ I will not produce a lesson until the actual course can be identified.
         ))) {
             $failures.Add("curriculum-research.md domestic evidence order is incorrect")
         }
-        foreach ($trackPhrase in @(
-            'Track A - Actual course boundary:', 'teacher syllabus', 'course/department page',
-            'course code/catalog', 'assigned chapters', 'lectures/assignments/labs/examination scope',
-            'Track B - Disciplinary knowledge line:', 'assigned textbook', 'teacher references',
-            'authoritative same-level textbooks/monographs', 'reputable publisher resources',
-            'professional bodies/open courses'
+        foreach ($trackChain in @(
+            'Track A - Actual course boundary: teacher syllabus -> course/department page -> course code/catalog -> assigned chapters -> lectures/assignments/labs/examination scope.',
+            'Track B - Disciplinary knowledge line: assigned textbook -> teacher references -> authoritative same-level textbooks/monographs -> reputable publisher resources -> professional bodies/open courses.'
         )) {
-            if ($curriculumContent -notmatch [regex]::Escape($trackPhrase)) {
-                $failures.Add("curriculum-research.md missing double-track element: $trackPhrase")
+            if ($curriculumContent -notmatch [regex]::Escape($trackChain)) {
+                $failures.Add("curriculum-research.md missing exact double-track chain: $trackChain")
             }
         }
     }
@@ -297,7 +281,7 @@ I will not produce a lesson until the actual course can be identified.
             '## Research Record',
             '## Course Evidence Package'
         )
-        if (-not (Test-RequiredHeadingSequence -Lines $sourceValidationLines -ExpectedHeadings $expectedHeadings)) {
+        if (-not (Test-ExactHeadings -Lines $sourceValidationLines -ExpectedHeadings $expectedHeadings)) {
             $failures.Add("source-validation.md headings or order do not match the required structure")
         }
 
@@ -307,7 +291,7 @@ I will not produce a lesson until the actual course can be identified.
             'teaching recommendation: a pedagogical choice for this learner',
             'A - decisive official/assigned evidence',
             'B - authoritative professional evidence',
-            'C - screened practice material',
+            'C - screened teaching practice',
             'D - lead only',
             'search-result snippets are never evidence',
             'WorldCat',
@@ -390,18 +374,10 @@ I will not produce a lesson until the actual course can be identified.
             }
         }
 
-        $textbookSection = ($templatesContent -split '(?m)^## Textbook Comparison\s*$', 2)[1]
-        if ($textbookSection) {
-            $textbookSection = ($textbookSection -split '(?m)^##\s+', 2)[0]
-        }
-        $tableHeaderLine = @($textbookSection -split '\r?\n' | Where-Object { $_ -match '^\|' } | Select-Object -First 1)
-        foreach ($requiredColumn in @(
-            'Candidate', 'Author', 'Publisher', 'ISBN', 'Edition', 'Chapters', 'Level',
-            'Strengths', 'Limitations', 'Notation differences', 'Adoption evidence'
-        )) {
-            if ($tableHeaderLine.Count -ne 1 -or $tableHeaderLine[0] -notmatch "(?i)(?:^|\|)\s*$([regex]::Escape($requiredColumn))\s*(?:\||$)") {
-                $failures.Add("templates.md Textbook Comparison missing column: $requiredColumn")
-            }
+        $tableHeader = [regex]::Escape('| Candidate | Author | Publisher | ISBN | Edition | Chapters | Level | Strengths | Limitations | Notation differences | Adoption evidence |')
+        $tableSeparator = [regex]::Escape('|---|---|---|---|---|---|---|---|---|---|---|')
+        if ($templatesContent -notmatch "(?m)^$tableHeader\r?\n$tableSeparator$") {
+            $failures.Add("templates.md Textbook Comparison must preserve the exact header and separator structure")
         }
     }
 
