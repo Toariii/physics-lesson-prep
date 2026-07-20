@@ -116,18 +116,6 @@ if (-not (Test-Path -LiteralPath $acceptanceValidator -PathType Leaf)) {
     throw "Acceptance validator does not exist: $acceptanceValidator"
 }
 
-$pwshPath = (Get-Command pwsh -ErrorAction Stop).Source
-$sourcePath = (Resolve-Path -LiteralPath $Source -ErrorAction Stop).Path
-if (-not (Test-Path -LiteralPath $sourcePath -PathType Container)) {
-    throw "Source is not a directory: $sourcePath"
-}
-Assert-NoReparsePoints -Path $sourcePath -Description "Source"
-
-$validationOutputPath = (Resolve-Path -LiteralPath $ValidationOutput -ErrorAction Stop).Path
-if (-not (Test-Path -LiteralPath $validationOutputPath -PathType Container)) {
-    throw "Validation output is not a directory: $validationOutputPath"
-}
-
 $destinationInput = $Destination.TrimEnd('/', '\')
 $destinationName = Split-Path -Leaf $destinationInput
 if ($destinationName -cne $requiredLeaf) {
@@ -174,6 +162,18 @@ if (Test-Path -LiteralPath $destinationPath) {
     Assert-NoReparsePoints -Path $destinationPath -Description "Existing destination"
 }
 Assert-SafeDestination -Path $destinationPath
+
+$pwshPath = (Get-Command pwsh -ErrorAction Stop).Source
+$sourcePath = (Resolve-Path -LiteralPath $Source -ErrorAction Stop).Path
+if (-not (Test-Path -LiteralPath $sourcePath -PathType Container)) {
+    throw "Source is not a directory: $sourcePath"
+}
+Assert-NoReparsePoints -Path $sourcePath -Description "Source"
+
+$validationOutputPath = (Resolve-Path -LiteralPath $ValidationOutput -ErrorAction Stop).Path
+if (-not (Test-Path -LiteralPath $validationOutputPath -PathType Container)) {
+    throw "Validation output is not a directory: $validationOutputPath"
+}
 
 Invoke-Validator -Validator $structuralValidator `
     -Arguments @('-SkillPath', $sourcePath) `
