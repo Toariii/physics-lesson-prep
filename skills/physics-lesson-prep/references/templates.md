@@ -124,6 +124,7 @@ Holidays/cancellations:
 Diagnostic lessons:
 Module/stage assessment lessons:
 Diagnosis and assessments:
+Deduction source: use the separate Diagnostic lessons and Module/stage assessment lessons fields only; do not deduct this summary.
 Revision and simulation:
 Effective lesson-equivalents/adjustments:
 Contingency percent:

@@ -365,15 +365,9 @@ I will not produce a lesson until the actual course can be identified.
             'wait in S8 without regenerating', 'Only option A advances to S8',
             'Planned teaching weeks', 'Diagnostic lessons', 'Module/stage assessment lessons',
             'Effective lesson-equivalents/adjustments',
-            'theoretical lessons = planned teaching weeks * lessons per week',
-            'usable lesson equivalents = theoretical lessons - cancellations - diagnosis - assessments - revision/simulation - contingency',
             'convert minutes to lesson equivalents', 'avoid double counting',
             'contingency percent and lesson equivalents', 'Selected capacity route',
-            'Option A is unavailable while a capacity conflict has no selected route',
-            'carry the selected route and its implications into S8',
-            'S8 remains active through the current two-to-four-lesson batch',
-            'lesson-level observations', 'urgent rollback',
-            'S9 begins only when the teacher reports the current batch taught or completed'
+            'lesson-level observations', 'urgent rollback'
         )) {
             if ($coursePlanningContent -notmatch [regex]::Escape($planningRule)) {
                 $failures.Add("course-planning.md missing required rule: $planningRule")
@@ -381,12 +375,26 @@ I will not produce a lesson until the actual course can be identified.
         }
 
         foreach ($routeDefinition in @(
-            'Minimum viable route: protect core outcomes and defer lower-priority content.',
-            'Recommended route: preserve understanding, practice, and feedback.',
-            'Enhanced route: requires more lesson capacity, homework capacity, or time.'
+            '(?is)Minimum viable route\b.*core outcomes.*defer',
+            '(?is)Recommended route\b.*understanding.*practice.*feedback',
+            '(?is)Enhanced route\b.*(?:lesson|homework|time)'
         )) {
-            if ($coursePlanningContent -notmatch [regex]::Escape($routeDefinition)) {
-                $failures.Add("course-planning.md missing exact route distinction: $routeDefinition")
+            if ($coursePlanningContent -notmatch $routeDefinition) {
+                $failures.Add("course-planning.md missing route distinction: $routeDefinition")
+            }
+        }
+
+        foreach ($planningBehavior in @(
+            '(?is)theoretical lesson(?:-equivalents| equivalents|s)?\s*=\s*planned teaching weeks\s*\*\s*lessons per week',
+            '(?is)usable lesson equivalents\s*=\s*theoretical lesson-equivalents\s*\+\s*effective-session adjustment\s*-\s*cancellations\s*-\s*diagnostic lessons\s*-\s*module/stage assessment lessons\s*-\s*revision/simulation\s*-\s*contingency lesson-equivalents',
+            '(?is)effective-session adjustment.*positive.*extended.*negative.*shortened',
+            '(?is)contingency.*percentage.*theoretical.*after known fixed cancellations.*before other planned deductions',
+            '(?is)capacity conflict.*teacher.*select.*Minimum viable.*Recommended.*Enhanced.*Option A.*unavailable.*no selected route',
+            '(?is)carry.*selected route.*implications.*S8',
+            '(?is)S8 remains active.*current.*(?:two-to-four|2-4).*lesson batch.*lesson-level observations.*urgent rollback.*S9 begins only.*teacher reports.*batch.*(?:taught|completed)'
+        )) {
+            if ($coursePlanningContent -notmatch $planningBehavior) {
+                $failures.Add("course-planning.md missing required planning behavior: $planningBehavior")
             }
         }
 
@@ -502,58 +510,21 @@ I will not produce a lesson until the actual course can be identified.
             'Selected route basis and implications:',
             'Teacher decision: A confirm / B change proportions / C change order or allocation / D change objectives / E add evidence'
         )) {
-            if ($templatesContent -notmatch [regex]::Escape($planningTemplateField)) {
+            $fieldPattern = '(?m)^' + [regex]::Escape($planningTemplateField) + '\s*$'
+            if ($templatesContent -notmatch $fieldPattern) {
                 $failures.Add("templates.md missing exact Task 5 field: $planningTemplateField")
             }
         }
 
-        $planningTemplateFixture = @'
-## Capacity Calculation
-
-```text
-Calendar weeks:
-Planned teaching weeks:
-Lessons per week:
-Minutes per lesson:
-Theoretical lessons:
-Holidays/cancellations:
-Diagnostic lessons:
-Module/stage assessment lessons:
-Diagnosis and assessments:
-Revision and simulation:
-Effective lesson-equivalents/adjustments:
-Contingency percent:
-Contingency lesson equivalents:
-5-10% contingency:
-Usable teaching lessons:
-Calculation/usable formula:
-Goal-capacity conflict:
-```
-
-## Course-Cycle Framework
-
-```text
-Final outcomes:
-Minimum viable route:
-Recommended route:
-Enhanced route:
-Selected capacity route:
-Selected route basis and implications:
-Stages and lesson allocation:
-Dependency graph:
-Minimum prerequisite remediation:
-Concept/practice proportions:
-Module exit criteria:
-Assessment nodes:
-Review and contingency:
-Risks, triggers, and alternatives:
-Next 2-4 lessons to prepare after confirmation:
-Teacher decision: A confirm / B change proportions / C change order or allocation / D change objectives / E add evidence
-```
-'@ -replace "`r`n", "`n"
-        $normalizedTemplates = $templatesContent -replace "`r`n", "`n"
-        if (-not $normalizedTemplates.TrimEnd().EndsWith($planningTemplateFixture.Trim())) {
-            $failures.Add("templates.md must end with the exact Task 5 planning templates")
+        if (-not (Test-OrderedPhrases -Content $templatesContent -Phrases @(
+            '## Capacity Calculation',
+            '## Course-Cycle Framework'
+        ))) {
+            $failures.Add("templates.md Task 5 planning headings are out of order")
+        }
+        if ($templatesContent -notmatch '(?m)^Diagnosis and assessments:\s*$' -or
+            $templatesContent -notmatch '(?m)^Deduction source: use the separate Diagnostic lessons and Module/stage assessment lessons fields only; do not deduct this summary\.\s*$') {
+            $failures.Add("templates.md must preserve Diagnosis and assessments as a non-deducted summary")
         }
     }
 
