@@ -128,7 +128,12 @@ if ($resolvedSkillPath) {
         'Competition Or Enrichment Package',
         'Accepted alternative methods',
         'instantaneous-center',
-        'teacher-review-ready'
+        'teacher-review-ready',
+        'explicit permission',
+        'real names',
+        'at least two',
+        'Adjustment level',
+        'Course Summary'
     )) {
         if ($joinedMarkdown -notmatch [regex]::Escape($requiredPhrase)) {
             $failures.Add("Markdown missing required phrase: $requiredPhrase")
@@ -557,6 +562,59 @@ Accepted alternative methods
         }
     }
 
+    $reflectionFile = Join-Path $resolvedSkillPath "references/reflection-and-records.md"
+    if (Test-Path -LiteralPath $reflectionFile -PathType Leaf) {
+        $reflectionContent = Get-Content -LiteralPath $reflectionFile -Raw
+        $reflectionLines = @(Get-Content -LiteralPath $reflectionFile)
+        $reflectionHeadings = @(
+            '# Reflection And Records',
+            '## File-Write Consent Gate',
+            '## Suggested Anonymous Record Structure',
+            '## Allowed And Prohibited Fields',
+            '## Source-Artifact Handling',
+            '## One-To-One And Small-Group Reflection',
+            '## Regular-Class Evidence',
+            '## Five-Dimension Reflection Analysis',
+            '## Mastery Scale 0-5',
+            '## Minor, Moderate, And Major Adjustments',
+            '## Rollback And Change History',
+            '## Next-Batch Gate',
+            '## Course Completion And Archive',
+            '## Damaged Or Conflicting Record Handling'
+        )
+        if (-not (Test-ExactHeadings -Lines $reflectionLines -ExpectedHeadings $reflectionHeadings)) {
+            $failures.Add("reflection-and-records.md headings or order do not match the required structure")
+        }
+
+        foreach ($reflectionPhrase in @(
+            'explicit permission', 'save directory', 'anonymous identifier', 'exact fields',
+            'preview changes', 'Temporary consultation', 'Never auto write', 'real names',
+            'at least two', 'knowledge', 'method', 'representation',
+            'notation and assessed communication', 'learning behavior', 'carelessness',
+            'Every mastery update', 'teacher impression', 'minor', 'moderate', 'major',
+            'timestamp', 'before', 'after', 'reason', 'teacher confirmation', 'impact',
+            'prior batch reflection', 'read-only', 'new cycle', 'stop writes',
+            'quarantine impacted materials', 're-audit'
+        )) {
+            if ($reflectionContent -notmatch [regex]::Escape($reflectionPhrase)) {
+                $failures.Add("reflection-and-records.md missing required phrase: $reflectionPhrase")
+            }
+        }
+
+        foreach ($masteryLine in @(
+            '0 Not encountered',
+            '1 Encountered but cannot explain',
+            '2 Foundation tasks with prompts',
+            '3 Independent standard tasks',
+            '4 Transfer to varied contexts',
+            '5 Explanation, method comparison, and non-standard problems'
+        )) {
+            if ($reflectionContent -notmatch ('(?m)^' + [regex]::Escape($masteryLine) + '\s*$')) {
+                $failures.Add("reflection-and-records.md missing exact mastery scale line: $masteryLine")
+            }
+        }
+    }
+
     $templatesFile = Join-Path $resolvedSkillPath "references/templates.md"
     if (Test-Path -LiteralPath $templatesFile -PathType Leaf) {
         $templatesContent = Get-Content -LiteralPath $templatesFile -Raw
@@ -685,6 +743,40 @@ Accepted alternative methods
             '## Lesson Batch Header', '## Single-Lesson Plan', '## Practice Question Record'
         ))) {
             $failures.Add("templates.md Task 6 headings are out of order")
+        }
+
+        foreach ($reflectionTemplateField in @(
+            '## Anonymous Record Write Preview', 'Proposed directory:', 'Anonymous identifier:',
+            'Files to create or modify:', 'Fields to store:',
+            'Original materials: reference only / copy allowed', 'Identifiable information excluded:',
+            'Teacher decision: approve / revise / do not save',
+            '## Post-Lesson Reflection', 'Planned versus completed content:',
+            'Independent performance:', 'Representative success:', 'Representative errors:',
+            'Exact sticking point:', 'Timing variance:', 'Homework evidence:', 'Learner feedback:',
+            'Teacher judgment:', 'Evidence confidence:',
+            '## Regular-Class Evidence', 'Class accuracy:', 'Sampled work:',
+            'High/middle/foundation tier performance:', 'Teacher observation:',
+            'Stage-test statistics:', 'Evidence items supplied:',
+            '## Adjustment Proposal', 'Adjustment level: minor / moderate / major',
+            'Evidence:', 'Current mastery state:', 'Proposed change:', 'Effect on next lessons:',
+            'Effect on course cycle:', 'Rollback state if required:',
+            'Teacher decision: confirm / revise / collect more evidence',
+            '## Course Summary', 'Initial goals:', 'Actual teaching delivered:',
+            'Evidence of knowledge and skill change:', 'Goals achieved or not achieved:',
+            'Remaining gaps:', 'Effective methods:', 'Low-value methods:',
+            'Recommended next chapters/books:', 'Teacher professional judgment to add:',
+            'Archive decision:'
+        )) {
+            $fieldPattern = '(?m)^' + [regex]::Escape($reflectionTemplateField) + '\s*$'
+            if ($templatesContent -notmatch $fieldPattern) {
+                $failures.Add("templates.md missing exact Task 7 field: $reflectionTemplateField")
+            }
+        }
+        if (-not (Test-OrderedPhrases -Content $templatesContent -Phrases @(
+            '## Anonymous Record Write Preview', '## Post-Lesson Reflection',
+            '## Regular-Class Evidence', '## Adjustment Proposal', '## Course Summary'
+        ))) {
+            $failures.Add("templates.md Task 7 headings are out of order")
         }
     }
 

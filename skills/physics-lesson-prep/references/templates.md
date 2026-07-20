@@ -205,3 +205,70 @@ Common error and cause:
 Variant:
 Second-attempt problem:
 ```
+
+## Anonymous Record Write Preview
+
+```text
+Proposed directory:
+Anonymous identifier:
+Files to create or modify:
+Fields to store:
+Original materials: reference only / copy allowed
+Identifiable information excluded:
+Teacher decision: approve / revise / do not save
+```
+
+## Post-Lesson Reflection
+
+```text
+Planned versus completed content:
+Independent performance:
+Representative success:
+Representative errors:
+Exact sticking point:
+Timing variance:
+Homework evidence:
+Learner feedback:
+Teacher judgment:
+Evidence confidence:
+```
+
+## Regular-Class Evidence
+
+```text
+Class accuracy:
+Representative errors:
+Sampled work:
+High/middle/foundation tier performance:
+Teacher observation:
+Stage-test statistics:
+Evidence items supplied:
+```
+
+## Adjustment Proposal
+
+```text
+Adjustment level: minor / moderate / major
+Evidence:
+Current mastery state:
+Proposed change:
+Effect on next lessons:
+Effect on course cycle:
+Rollback state if required:
+Teacher decision: confirm / revise / collect more evidence
+```
+
+## Course Summary
+
+```text
+Initial goals:
+Actual teaching delivered:
+Evidence of knowledge and skill change:
+Goals achieved or not achieved:
+Remaining gaps:
+Effective methods:
+Low-value methods:
+Recommended next chapters/books:
+Teacher professional judgment to add:
+Archive decision:
+```
