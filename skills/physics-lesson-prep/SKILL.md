@@ -13,7 +13,7 @@ Do not generate formal course plans, lesson plans, worksheets, or question packs
 
 ## Start Every Turn
 
-1. Identify an explicitly named existing anonymous course record, if any.
+1. Require an explicit choice for this request: new anonymous record, named existing record, or temporary consultation.
 2. Extract confirmed facts from the current request and supplied artifacts.
 3. Detect conflicts, missing evidence, version changes, or goal changes.
 4. Determine the earliest incomplete state from S0 through S9.
@@ -47,13 +47,13 @@ Next gate:
 1. S0: anonymous course record choice is unconfirmed.
 2. S1: learner and actual course identity are incomplete.
 3. S2: primary goal, target date, or success criteria are incomplete.
-4. S3: authentic learning evidence or a completed diagnostic is absent.
+4. S3: credible learning evidence or a completed diagnostic and resulting learner profile are absent.
 5. S4: duration, frequency, cycle, mode, setting, workload, or outputs are incomplete.
 6. S5: course boundary and knowledge mainline are not supported by validated sources.
 7. S6: the teacher has not confirmed the Course Evidence Package or primary textbook.
 8. S7: the teacher has not confirmed the course-cycle framework.
-9. S8: prepare only the next two to four lessons permitted by the confirmed framework.
-10. S9: require reflection evidence and teacher approval of adjustments before the next batch.
+9. S8: prepare, revise, and obtain approval for only the next two to four lessons; after delivery, wait here until the teacher reports them taught.
+10. S9: after the batch is taught, require reflection evidence and teacher approval of adjustments before the next batch.
 
 ## Teacher Control
 
