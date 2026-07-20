@@ -702,8 +702,11 @@ Accepted alternative methods
     $actualFiles = @(Get-ChildItem -LiteralPath $resolvedSkillPath -Recurse -File | ForEach-Object {
         [System.IO.Path]::GetRelativePath($resolvedSkillPath, $_.FullName).Replace('\', '/')
     })
+    $reflectionPath = Join-Path $resolvedSkillPath 'references/reflection-and-records.md'
+    $allowTransitionalGitkeep = -not (Test-Path -LiteralPath $reflectionPath -PathType Leaf)
     foreach ($actualFile in $actualFiles) {
-        if ($actualFile -notin $expectedFiles) {
+        $isTransitionalGitkeep = $allowTransitionalGitkeep -and $actualFile -ceq 'references/.gitkeep'
+        if ($actualFile -notin $expectedFiles -and -not $isTransitionalGitkeep) {
             $failures.Add("Unexpected file: $actualFile")
         }
     }
