@@ -155,3 +155,53 @@ Risks, triggers, and alternatives:
 Next 2-4 lessons to prepare after confirmation:
 Teacher decision: A confirm / B change proportions / C change order or allocation / D change objectives / E add evidence
 ```
+
+## Lesson Batch Header
+
+```text
+Anonymous record:
+Current state: S8
+Course/version:
+Primary textbook and chapters:
+Course-cycle stage:
+Learner evidence used:
+Package mode:
+Lessons in this batch:
+Source status:
+Release label: teacher-review-ready / draft
+Teacher checks still required:
+```
+
+## Single-Lesson Plan
+
+```text
+Position in cycle:
+Evidence addressed:
+Objectives and exit criteria:
+Prerequisites:
+Preparation:
+Timeline with teacher move, learner action, question, evidence, and branch:
+Knowledge explanation or question route:
+Anticipated errors and responses:
+Formative assessment:
+Homework:
+Faster-progress branch:
+Slower-progress branch:
+Post-lesson reflection fields:
+```
+
+## Practice Question Record
+
+```text
+Source:
+Year/series/edition and item:
+Official / licensed / original / adapted:
+Concept and cognitive demand:
+Difficulty and expected time:
+Student prompt:
+Teacher solution:
+Marking points:
+Common error and cause:
+Variant:
+Second-attempt problem:
+```

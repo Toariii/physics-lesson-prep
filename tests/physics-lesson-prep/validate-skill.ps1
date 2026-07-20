@@ -121,7 +121,14 @@ if ($resolvedSkillPath) {
         'recommended route',
         'enhanced route',
         'Module Exit Criteria',
-        'first lesson'
+        'first lesson',
+        'Concept-Focused Package',
+        'Practice-Focused Package',
+        'Mixed Package',
+        'Competition Or Enrichment Package',
+        'Accepted alternative methods',
+        'instantaneous-center',
+        'teacher-review-ready'
     )) {
         if ($joinedMarkdown -notmatch [regex]::Escape($requiredPhrase)) {
             $failures.Add("Markdown missing required phrase: $requiredPhrase")
@@ -422,6 +429,110 @@ I will not produce a lesson until the actual course can be identified.
         }
     }
 
+    $materialFile = Join-Path $resolvedSkillPath "references/material-packages.md"
+    if (Test-Path -LiteralPath $materialFile -PathType Leaf) {
+        $materialContent = Get-Content -LiteralPath $materialFile -Raw
+        $materialLines = @(Get-Content -LiteralPath $materialFile)
+        $expectedHeadings = @(
+            '# Material Packages',
+            '## S8 Entry Gate And Common Header',
+            '## Concept-Focused Package',
+            '## Practice-Focused Package',
+            '## Mixed Package',
+            '## Competition Or Enrichment Package',
+            '## Student And Teacher Version Separation',
+            '## Question Provenance',
+            '## Standard Solution Contract',
+            '## Lesson One Versus Lessons Two To Four',
+            '## Teacher-Review Label'
+        )
+        if (-not (Test-ExactHeadings -Lines $materialLines -ExpectedHeadings $expectedHeadings)) {
+            $failures.Add("material-packages.md headings or order do not match the required structure")
+        }
+        foreach ($materialRule in @(
+            'confirmed Course Evidence Package', 'confirmed primary textbook', 'selected capacity route',
+            'no blocking unresolved item', 'objectives and observable exit criteria', 'central question',
+            'model, assumptions, boundaries', 'real system', 'what the model explains',
+            'what it does not explain', 'do not start with an equation', 'daily-life example',
+            'question-type map', 'concept identification', 'model selection', 'equation construction',
+            'representation conversion', 'multistep reasoning', 'evaluation', 'non-standard transfer',
+            'Do not use a number-only change as a variant',
+            'diagnosis -> targeted explanation -> teacher modeling -> scaffolded practice -> independent practice -> error discussion -> variant transfer -> exit evidence',
+            'context with minimal information', 'graded hints', 'complete solution', 'official problem scope',
+            'clean student version', 'no hidden commentary', 'accessibility', 'unknown source',
+            'copyright', 'independent physics audit', 'alternative acceptable range',
+            'Lesson 1 is fully fixed', 'Lessons 2-4 are adjustable branches',
+            'do not silently regenerate the whole batch', 'course gate, education-design gate, physics audit, intended-use gate',
+            'Otherwise use `draft` and list the exact blockers'
+        )) {
+            if ($materialContent -notmatch [regex]::Escape($materialRule)) {
+                $failures.Add("material-packages.md missing required rule: $materialRule")
+            }
+        }
+        $standardSolution = @'
+Model and known conditions
+Symbols, frame, and sign convention
+Physical principle
+Derivation or calculation
+Final answer
+Units and significant figures
+Physical interpretation
+Independent check
+Marking points
+Accepted alternative methods
+'@ -replace "`r`n", "`n"
+        if (-not (($materialContent -replace "`r`n", "`n").Contains($standardSolution.Trim()))) {
+            $failures.Add("material-packages.md standard solution lines are missing or out of order")
+        }
+    }
+
+    $physicsAuditFile = Join-Path $resolvedSkillPath "references/physics-audit.md"
+    if (Test-Path -LiteralPath $physicsAuditFile -PathType Leaf) {
+        $physicsAuditContent = Get-Content -LiteralPath $physicsAuditFile -Raw
+        $physicsAuditLines = @(Get-Content -LiteralPath $physicsAuditFile)
+        $expectedHeadings = @(
+            '# Physics Audit',
+            '## Universal Model And Calculation Audit',
+            '## Mechanics And Rigid-Body Audit',
+            '## Circuits And Electromagnetism Audit',
+            '## Waves, Optics, And SHM Audit',
+            '## Thermal, Fluids, Nuclear, And Modern Physics Audit',
+            '## Graph And Data Audit',
+            '## Diagram Specification And Release Gate',
+            '## Experiment Safety And Feasibility',
+            '## Question-Solution-Marking Consistency',
+            '## Cross-Textbook Notation And Depth',
+            '## Release Labels'
+        )
+        if (-not (Test-ExactHeadings -Lines $physicsAuditLines -ExpectedHeadings $expectedHeadings)) {
+            $failures.Add("physics-audit.md headings or order do not match the required structure")
+        }
+        foreach ($auditRule in @(
+            'system, boundary, reference frame, sign convention, assumptions, and approximation regime',
+            'algebra, arithmetic, dimensions, units, prefixes, significant figures', 'limiting cases',
+            'question, diagram, solution, final answer, and marking guidance', 'independently solve every numerical original or adapted question',
+            '`confirmed`, `provisional`, or `unresolved`', 'choose the object -> isolate it',
+            'relative velocity and relative acceleration', 'centripetal and tangential terms',
+            'velocity relation only', 'undefined or at infinity', 'not an acceleration shortcut',
+            'rolling no-slip constraints', 'parallel-axis theorem', 'energy and angular momentum',
+            'planar from three-dimensional rotation', 'cross products and right-hand-rule directions',
+            'nodes, branches, junctions', 'conventional current from electron motion', 'visual proximity',
+            'particle motion from propagation', 'normal, focal points', 'displacement, velocity, acceleration',
+            'temperature, heat, internal energy, and power', 'activity, count rate, dose, and energy',
+            'raw versus transformed data', 'Do not infer causation', 'purpose, represented system, topology or geometry',
+            'Generated art remains `draft`', 'apparatus ratings', 'hazards, persons at risk, controls, residual risk',
+            'simulation, video, teacher demonstration, or prepared dataset fallback',
+            'qualitative observation as quantitative verification', 'spring-balance reading as net force',
+            'local policy and qualified-teacher approval', 'high risk', 'no undeclared assumption',
+            'valid alternative solutions', 'confirmed primary textbook', 'Do not mix conventions silently',
+            'Otherwise label it `draft` and list the exact blockers'
+        )) {
+            if ($physicsAuditContent -notmatch [regex]::Escape($auditRule)) {
+                $failures.Add("physics-audit.md missing required rule: $auditRule")
+            }
+        }
+    }
+
     $templatesFile = Join-Path $resolvedSkillPath "references/templates.md"
     if (Test-Path -LiteralPath $templatesFile -PathType Leaf) {
         $templatesContent = Get-Content -LiteralPath $templatesFile -Raw
@@ -525,6 +636,29 @@ I will not produce a lesson until the actual course can be identified.
         if ($templatesContent -notmatch '(?m)^Diagnosis and assessments:\s*$' -or
             $templatesContent -notmatch '(?m)^Deduction source: use the separate Diagnostic lessons and Module/stage assessment lessons fields only; do not deduct this summary\.\s*$') {
             $failures.Add("templates.md must preserve Diagnosis and assessments as a non-deducted summary")
+        }
+
+        foreach ($lessonTemplateField in @(
+            '## Lesson Batch Header', 'Current state: S8', 'Primary textbook and chapters:',
+            'Course-cycle stage:', 'Learner evidence used:', 'Package mode:', 'Lessons in this batch:',
+            'Source status:', 'Release label: teacher-review-ready / draft', 'Teacher checks still required:',
+            '## Single-Lesson Plan', 'Position in cycle:', 'Evidence addressed:',
+            'Objectives and exit criteria:', 'Timeline with teacher move, learner action, question, evidence, and branch:',
+            'Knowledge explanation or question route:', 'Anticipated errors and responses:',
+            'Faster-progress branch:', 'Slower-progress branch:', 'Post-lesson reflection fields:',
+            '## Practice Question Record', 'Year/series/edition and item:',
+            'Official / licensed / original / adapted:', 'Concept and cognitive demand:',
+            'Difficulty and expected time:', 'Student prompt:', 'Teacher solution:',
+            'Common error and cause:', 'Variant:', 'Second-attempt problem:'
+        )) {
+            if ($templatesContent -notmatch [regex]::Escape($lessonTemplateField)) {
+                $failures.Add("templates.md missing exact Task 6 field: $lessonTemplateField")
+            }
+        }
+        if (-not (Test-OrderedPhrases -Content $templatesContent -Phrases @(
+            '## Lesson Batch Header', '## Single-Lesson Plan', '## Practice Question Record'
+        ))) {
+            $failures.Add("templates.md Task 6 headings are out of order")
         }
     }
 
