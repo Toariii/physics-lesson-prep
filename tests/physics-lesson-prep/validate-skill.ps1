@@ -40,6 +40,7 @@ function Get-ReflectionPolicyIssues {
         'homework must use a truthful null or class-assessment alternative' = '(?is)\bnot assigned\b.*\bclass or assessment evidence\b'
         'next-batch gate must require error entry and approved adjustment decision' = '(?is)\bnext batch requires\b.*\brepresentative-error entry\b.*\bhomework or class or assessment evidence\b.*\bteacher-confirmed adjustment decision\b'
         'continue-unchanged decisions must meet exit criteria and record rationale' = '(?is)\bcontinue unchanged\b.*\bexit criteria\b.*\bapproved no-change decision\b.*\brationale\b'
+        'no-change decisions must use a non-applicable adjustment level' = '(?is)\bcontinue unchanged\b.*\bAdjustment level\b.*\bnot applicable \(continue unchanged\)'
         'recovery must preserve and hash the damaged original and restore to a new path' = '(?is)\bpreserve the damaged original\b.*\bread-only\b.*\bhash\b.*\bnew path\b.*\bnever overwrite\b'
         'recovery must validate, preview, reconfirm, resolve conflicts, and retain an audit trail' = '(?is)\bvalidate (?:the )?backup structure and inventory\b.*\bprovenance\b.*\brecovered fields\b.*\bpreview\b.*\brenew teacher consent\b.*\bcompare and resolve conflicts\b.*\bonly replace the active record after\b.*\baudit trail\b'
         'rollback mappings must preserve S1-S9 routing' = '(?is)\bcourse identity or version returns to S1\b.*\bgoals return to S2\b.*\bprofile returns to S3\b.*\bconditions return to S4\b.*\bsource evidence returns to S5-S6\b.*\bcycle design returns to S7\b.*\breturns to S9\b'
@@ -57,6 +58,7 @@ function Get-ReflectionPolicyIssues {
         'identifier falsely guarantees anonymity' = '(?im)\banonymous identifier\b(?![^.!?\r\n]{0,100}\b(?:does not|cannot|never)\b)[^.!?\r\n]{0,100}\b(?:guarantees?|ensures?|makes?)\b[^.!?\r\n]{0,80}\b(?:anonymous|anonymity)\b'
         'homework evidence is mandatory' = '(?im)(?![^.!?\r\n]{0,160}\bonly when\b)\b(?:requires?|must include|mandatory)\b[^.!?\r\n]{0,80}\bhomework evidence\b'
         'adjustment confirmation may be bypassed' = '(?im)\b(?:may|can|should)\s+(?:bypass|skip)\b[^.!?\r\n]{0,80}\bteacher confirmation\b|\bapply\b[^.!?\r\n]{0,80}\bwithout teacher confirmation\b'
+        'no-change decision is forced into an adjustment level' = '(?im)\bcontinue unchanged\b[^.!?\r\n]{0,120}\bAdjustment level:\s*(?:minor|moderate|major)\b'
         'damaged records may be overwritten' = '(?im)(?<!never )\b(?:overwrite|replace)\b[^.!?\r\n]{0,80}\bdamaged (?:original|record)\b'
         'archive is mutable' = '(?im)\barchive\b[^.!?\r\n]{0,80}\b(?:mutable|editable|may be changed|can be changed)\b'
         'exports may proceed without approval' = '(?im)\bexports?\b[^.!?\r\n]{0,100}\bwithout (?:teacher )?approval\b'
@@ -817,6 +819,8 @@ Accepted alternative methods
             'High/middle/foundation tier performance:', 'Teacher observation:',
             'Stage-test statistics:', 'Evidence items supplied:',
             '## Adjustment Proposal', 'Adjustment level: minor / moderate / major',
+            'Decision type: adjust / continue unchanged',
+            'No-change rationale and exit criteria evidence:',
             'Evidence:', 'Current mastery state:', 'Proposed change:', 'Effect on next lessons:',
             'Effect on course cycle:', 'Rollback state if required:',
             'Teacher decision: confirm / revise / collect more evidence',
@@ -836,6 +840,22 @@ Accepted alternative methods
             '## Regular-Class Evidence', '## Adjustment Proposal', '## Course Summary'
         ))) {
             $failures.Add("templates.md Task 7 headings are out of order")
+        }
+
+        if (-not (Test-OrderedPhrases -Content $templatesContent -Phrases @(
+            'Identifiable information excluded:', 'Record classification: pseudonymous / anonymous-minimized',
+            'Retention period and review date:', 'Authorized access:', 'Export decision and approval:',
+            'Lawful-basis and institution-policy confirmation:',
+            'Teacher decision: approve / revise / do not save'
+        ))) {
+            $failures.Add("templates.md anonymous write preview must place teacher decision after all governance fields")
+        }
+        if (-not (Test-OrderedPhrases -Content $templatesContent -Phrases @(
+            'Decision type: adjust / continue unchanged',
+            'Adjustment level: minor / moderate / major',
+            'No-change rationale and exit criteria evidence:'
+        ))) {
+            $failures.Add("templates.md adjustment proposal must represent decision type before level and rationale")
         }
 
         foreach ($recordTemplateField in @(

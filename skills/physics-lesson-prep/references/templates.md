@@ -215,12 +215,12 @@ Files to create or modify:
 Fields to store:
 Original materials: reference only / copy allowed
 Identifiable information excluded:
-Teacher decision: approve / revise / do not save
 Record classification: pseudonymous / anonymous-minimized
 Retention period and review date:
 Authorized access:
 Export decision and approval:
 Lawful-basis and institution-policy confirmation:
+Teacher decision: approve / revise / do not save
 ```
 
 ## Post-Lesson Reflection
@@ -253,7 +253,9 @@ Evidence items supplied:
 ## Adjustment Proposal
 
 ```text
+Decision type: adjust / continue unchanged
 Adjustment level: minor / moderate / major
+No-change rationale and exit criteria evidence:
 Evidence:
 Current mastery state:
 Proposed change:
@@ -262,6 +264,8 @@ Effect on course cycle:
 Rollback state if required:
 Teacher decision: confirm / revise / collect more evidence
 ```
+
+For `Decision type: continue unchanged`, record `Adjustment level: not applicable (continue unchanged)` and complete the no-change rationale and exit-criteria evidence. Do not force a minor, moderate, or major label onto a no-change decision.
 
 ## Course Summary
 
