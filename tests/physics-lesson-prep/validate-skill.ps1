@@ -86,7 +86,15 @@ if ($resolvedSkillPath) {
         'next two to four lessons',
         'anonymous',
         'representative errors',
-        'search-result snippets'
+        'search-result snippets',
+        'Track A',
+        'Track B',
+        'ISBN',
+        'WorldCat',
+        'course fact',
+        'disciplinary fact',
+        'teaching recommendation',
+        'Course Evidence Package'
     )) {
         if ($joinedMarkdown -notmatch [regex]::Escape($requiredPhrase)) {
             $failures.Add("Markdown missing required phrase: $requiredPhrase")
@@ -177,6 +185,82 @@ I will not produce a lesson until the actual course can be identified.
         }
     }
 
+    $curriculumFile = Join-Path $resolvedSkillPath "references/curriculum-research.md"
+    if (Test-Path -LiteralPath $curriculumFile -PathType Leaf) {
+        $curriculumContent = Get-Content -LiteralPath $curriculumFile -Raw
+        $actualHeadings = @(Get-Content -LiteralPath $curriculumFile | Where-Object { $_ -match '^#{1,2}\s' })
+        $expectedHeadings = @(
+            '# Curriculum Research',
+            '## Research Entry Gate',
+            '## Research Task Card',
+            '## Domestic Middle And High School Route',
+            '## AP Route',
+            '## IB Route',
+            '## Cambridge International Route',
+            '## Pearson Edexcel And Other Awarding Bodies',
+            '## University Double-Track Research',
+            '## Assigned Textbook Route',
+            '## No Assigned Textbook Route',
+            '## Secondary Teaching-Material Search',
+            '## Research Failure And Offline Degradation'
+        )
+        if (($actualHeadings -join "`n") -cne ($expectedHeadings -join "`n")) {
+            $failures.Add("curriculum-research.md headings or order do not match the required structure")
+        }
+
+        foreach ($researchRule in @(
+            'Track A - Actual course boundary: teacher syllabus -> course/department page -> course code/catalog -> assigned chapters -> lectures/assignments/labs/examination scope.',
+            'Track B - Disciplinary knowledge line: assigned textbook -> teacher references -> authoritative same-level textbooks/monographs -> reputable publisher resources -> professional bodies/open courses.',
+            'exactly two or three candidates',
+            'teacher confirms one primary textbook before S6 or S7',
+            'no formal plan',
+            'do not bypass login or paywall',
+            'do not download an unauthorized full textbook or question bank'
+        )) {
+            if ($curriculumContent -notmatch [regex]::Escape($researchRule)) {
+                $failures.Add("curriculum-research.md missing required rule: $researchRule")
+            }
+        }
+    }
+
+    $sourceValidationFile = Join-Path $resolvedSkillPath "references/source-validation.md"
+    if (Test-Path -LiteralPath $sourceValidationFile -PathType Leaf) {
+        $sourceValidationContent = Get-Content -LiteralPath $sourceValidationFile -Raw
+        $actualHeadings = @(Get-Content -LiteralPath $sourceValidationFile | Where-Object { $_ -match '^#{1,2}\s' })
+        $expectedHeadings = @(
+            '# Source Validation',
+            '## Separate Three Claim Types',
+            '## A-D Evidence Levels',
+            '## Web Page Verification',
+            '## Official PDF Verification',
+            '## Book And Edition Verification',
+            '## Cross-Validation Rules',
+            '## Source Conflict Procedure',
+            '## Question Provenance And Copyright',
+            '## Research Record',
+            '## Course Evidence Package'
+        )
+        if (($actualHeadings -join "`n") -cne ($expectedHeadings -join "`n")) {
+            $failures.Add("source-validation.md headings or order do not match the required structure")
+        }
+
+        foreach ($sourceRule in @(
+            'course fact: what the target course requires',
+            'disciplinary fact: what physics and mathematics establish',
+            'teaching recommendation: a pedagogical choice for this learner',
+            'A - decisive official/assigned',
+            'B - authoritative professional',
+            'C - screened practice',
+            'D - lead only',
+            'search-result snippets are never evidence',
+            'WorldCat'
+        )) {
+            if ($sourceValidationContent -notmatch [regex]::Escape($sourceRule)) {
+                $failures.Add("source-validation.md missing required rule: $sourceRule")
+            }
+        }
+    }
+
     $templatesFile = Join-Path $resolvedSkillPath "references/templates.md"
     if (Test-Path -LiteralPath $templatesFile -PathType Leaf) {
         $templatesContent = Get-Content -LiteralPath $templatesFile -Raw
@@ -205,10 +289,43 @@ I will not produce a lesson until the actual course can be identified.
 
         $profileSection = ($templatesContent -split '(?m)^## Learner Evidence Profile\s*$', 2)[1]
         if ($profileSection) {
+            $profileSection = ($profileSection -split '(?m)^##\s+', 2)[0]
             $profileRows = @($profileSection -split '\r?\n' | Where-Object { $_ -match '^\|' })
             if ($profileRows.Count -ne 2) {
                 $failures.Add("Learner Evidence Profile must contain only its header and separator rows")
             }
+        }
+
+        foreach ($researchTemplateField in @(
+            '## Research Task Card',
+            'Course and version:', 'Student stage and setting:', 'Primary goal and target date:',
+            'Current module:', 'Known textbook or syllabus:', 'Questions to verify:',
+            'Required official evidence:', 'Required book evidence:',
+            '## Source Record',
+            'Claim type: course fact / disciplinary fact / teaching recommendation',
+            'Evidence level: A / B / C / D', 'Institution or author:',
+            'URL or bibliographic record:', 'Published/updated or edition year:',
+            'Access date:', 'Course/version applicability:', 'Exact information used:',
+            'Cross-validation:', 'Replacement or conflict risk:', 'Verification status:',
+            '## Textbook Comparison',
+            '| Candidate | Author | Publisher | ISBN | Edition | Chapters | Level | Strengths | Limitations | Notation differences | Adoption evidence |',
+            'Teacher decision: choose one primary textbook / request new candidates / provide assigned book',
+            '## Course Evidence Package',
+            'Course identity and version:', 'School Course Boundary:', 'Textbook Knowledge Mainline:',
+            'Required / recommended / excluded content:', 'Prerequisite relationships:',
+            'Assessment and marking requirements:', 'Official, school, and recommended sequence:',
+            'Learner evidence gap:', 'Source list:', 'Source conflicts:', 'Unresolved items:',
+            'Teacher decision: A confirm / B modify order / C research again / D provide school material'
+        )) {
+            if ($templatesContent -notmatch [regex]::Escape($researchTemplateField)) {
+                $failures.Add("templates.md missing Task 4 field: $researchTemplateField")
+            }
+        }
+
+        $tableHeader = [regex]::Escape('| Candidate | Author | Publisher | ISBN | Edition | Chapters | Level | Strengths | Limitations | Notation differences | Adoption evidence |')
+        $tableSeparator = [regex]::Escape('|---|---|---|---|---|---|---|---|---|---|---|')
+        if ($templatesContent -notmatch "(?m)^$tableHeader\r?\n$tableSeparator$") {
+            $failures.Add("templates.md Textbook Comparison table must preserve the exact empty extensible structure")
         }
     }
 
