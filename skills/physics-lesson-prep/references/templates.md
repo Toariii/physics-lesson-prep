@@ -111,3 +111,37 @@ Teacher decision: A confirm / B modify order / C research again / D provide scho
 ```
 
 Decision A confirm is available only when course identity/version, the assessment model where relevant, the primary textbook or knowledge mainline, and every decisive conflict are resolved. If any blocking item remains, Decision A is unavailable; labeled non-blocking follow-ups may remain.
+
+## Capacity Calculation
+
+```text
+Calendar weeks:
+Lessons per week:
+Minutes per lesson:
+Theoretical lessons:
+Holidays/cancellations:
+Diagnosis and assessments:
+Revision and simulation:
+5-10% contingency:
+Usable teaching lessons:
+Goal-capacity conflict:
+```
+
+## Course-Cycle Framework
+
+```text
+Final outcomes:
+Minimum viable route:
+Recommended route:
+Enhanced route:
+Stages and lesson allocation:
+Dependency graph:
+Minimum prerequisite remediation:
+Concept/practice proportions:
+Module exit criteria:
+Assessment nodes:
+Review and contingency:
+Risks, triggers, and alternatives:
+Next 2-4 lessons to prepare after confirmation:
+Teacher decision: A confirm / B change proportions / C change order or allocation / D change objectives / E add evidence
+```

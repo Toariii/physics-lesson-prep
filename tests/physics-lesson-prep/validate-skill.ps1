@@ -115,7 +115,13 @@ if ($resolvedSkillPath) {
         'course fact',
         'disciplinary fact',
         'teaching recommendation',
-        'Course Evidence Package'
+        'Course Evidence Package',
+        '5-10% contingency',
+        'minimum viable route',
+        'recommended route',
+        'enhanced route',
+        'Module Exit Criteria',
+        'first lesson'
     )) {
         if ($joinedMarkdown -notmatch [regex]::Escape($requiredPhrase)) {
             $failures.Add("Markdown missing required phrase: $requiredPhrase")
@@ -311,6 +317,93 @@ I will not produce a lesson until the actual course can be identified.
         }
     }
 
+    $coursePlanningFile = Join-Path $resolvedSkillPath "references/course-planning.md"
+    if (Test-Path -LiteralPath $coursePlanningFile -PathType Leaf) {
+        $coursePlanningContent = Get-Content -LiteralPath $coursePlanningFile -Raw
+        $coursePlanningLines = @(Get-Content -LiteralPath $coursePlanningFile)
+        $expectedHeadings = @(
+            '# Course Planning',
+            '## Planning Entry Gate',
+            '## Teaching Capacity Calculation',
+            '## Goal-Capacity Conflict',
+            '## Course-Cycle Layers',
+            '## Module Dependencies And Minimum Remediation',
+            '## Module Exit Criteria',
+            '## Assessment Nodes',
+            '## Four Goal Strategies',
+            '## Concept-Practice Allocation',
+            '## Risks And Alternative Routes',
+            '## Rolling Two-To-Four-Lesson Rule',
+            '## Course-Cycle Confirmation'
+        )
+        if (-not (Test-ExactHeadings -Lines $coursePlanningLines -ExpectedHeadings $expectedHeadings)) {
+            $failures.Add("course-planning.md headings or order do not match the required structure")
+        }
+
+        foreach ($planningRule in @(
+            'S6 Evidence Package', 'teacher option A', 'primary textbook or knowledge mainline',
+            'no blocking conflicts', 'Course Requirements Confirmation Sheet remains current', 'roll back',
+            'Calendar weeks', 'Lessons per week', 'Minutes per lesson', 'Theoretical lessons',
+            'Holidays/cancellations', 'Diagnosis', 'Module/stage assessments',
+            'Review/revision/simulation', '5-10% contingency', 'Usable teaching lessons',
+            'Do not count homework as lesson capacity', 'range and a conservative case',
+            'State every assumption', 'do not fabricate capacity',
+            'final measurable outcomes', 'dependency graph', 'minimum prerequisite remediation',
+            'not a reteach of the entire prior course',
+            'knowledge, skill, notation, transfer, and accuracy/time', 'evidence source',
+            'not advance automatically', 'entrance diagnosis', 'in-lesson formative',
+            'module quiz', 'stage assessment', 'comprehensive assessment', 'mock/final output',
+            'purpose, evidence, and response', 'concept maps and explanation',
+            'strategy and nonstandard', 'score improvement', 'synchronized consolidation',
+            'advance preparation', 'competition or enrichment',
+            'explanation, guided practice, independent practice, and review',
+            'insufficient time', 'math gap', 'school progress change', 'homework noncompletion',
+            'source mismatch', 'score fluctuation', 'equipment', 'goal change',
+            'trigger and an alternative route', 'full course-cycle framework only',
+            'next two to four lessons', 'first lesson is fully fixed',
+            'lessons 2-4 remain adjustable', 'do not detail all future lessons',
+            'wait in S8 without regenerating', 'after a lesson is taught, move to S9',
+            'Only option A advances to S8'
+        )) {
+            if ($coursePlanningContent -notmatch [regex]::Escape($planningRule)) {
+                $failures.Add("course-planning.md missing required rule: $planningRule")
+            }
+        }
+
+        foreach ($routeDefinition in @(
+            'Minimum viable route: protect core outcomes and defer lower-priority content.',
+            'Recommended route: preserve understanding, practice, and feedback.',
+            'Enhanced route: requires more lesson capacity, homework capacity, or time.'
+        )) {
+            if ($coursePlanningContent -notmatch [regex]::Escape($routeDefinition)) {
+                $failures.Add("course-planning.md missing exact route distinction: $routeDefinition")
+            }
+        }
+
+        foreach ($strategy in @(
+            'score-loss analysis -> high-frequency repair -> item and marking analysis -> timed mixed practice -> simulation -> retraining',
+            'synchronized pre-activation -> concept repair -> schoolwork correction -> transfer -> assessment',
+            'advance familiarity -> understanding -> readiness -> cognitive-load reduction -> mathematics preparation',
+            'competition mathematics route -> model library -> multiple methods -> approximation -> dimensional analysis -> proof -> nonstandard problems -> strategy -> official problems'
+        )) {
+            if ($coursePlanningContent -notmatch [regex]::Escape($strategy)) {
+                $failures.Add("course-planning.md missing exact goal strategy: $strategy")
+            }
+        }
+
+        foreach ($confirmationOption in @(
+            'A - confirm and advance to S8',
+            'B - change proportions and stay in S7',
+            'C - change order/allocation and stay in S7',
+            'D - change objectives and return to S2 or S7 according to impact',
+            'E - add evidence and return to the earliest affected state from S1-S6'
+        )) {
+            if ($coursePlanningContent -notmatch [regex]::Escape($confirmationOption)) {
+                $failures.Add("course-planning.md missing exact confirmation option: $confirmationOption")
+            }
+        }
+    }
+
     $templatesFile = Join-Path $resolvedSkillPath "references/templates.md"
     if (Test-Path -LiteralPath $templatesFile -PathType Leaf) {
         $templatesContent = Get-Content -LiteralPath $templatesFile -Raw
@@ -374,10 +467,69 @@ I will not produce a lesson until the actual course can be identified.
             }
         }
 
-        $tableHeader = [regex]::Escape('| Candidate | Author | Publisher | ISBN | Edition | Chapters | Level | Strengths | Limitations | Notation differences | Adoption evidence |')
-        $tableSeparator = [regex]::Escape('|---|---|---|---|---|---|---|---|---|---|---|')
-        if ($templatesContent -notmatch "(?m)^$tableHeader\r?\n$tableSeparator$") {
+        $exactTable = @'
+| Candidate | Author | Publisher | ISBN | Edition | Chapters | Level | Strengths | Limitations | Notation differences | Adoption evidence |
+|---|---|---|---|---|---|---|---|---|---|---|
+'@
+        if (-not ($templatesContent -replace "`r`n", "`n").Contains($exactTable.Trim())) {
             $failures.Add("templates.md Textbook Comparison must preserve the exact header and separator structure")
+        }
+
+        foreach ($planningTemplateField in @(
+            '## Capacity Calculation', 'Calendar weeks:', 'Lessons per week:',
+            'Minutes per lesson:', 'Theoretical lessons:', 'Holidays/cancellations:',
+            'Diagnosis and assessments:', 'Revision and simulation:', '5-10% contingency:',
+            'Usable teaching lessons:', 'Goal-capacity conflict:', '## Course-Cycle Framework',
+            'Final outcomes:', 'Minimum viable route:', 'Recommended route:', 'Enhanced route:',
+            'Stages and lesson allocation:', 'Dependency graph:', 'Minimum prerequisite remediation:',
+            'Concept/practice proportions:', 'Module exit criteria:', 'Assessment nodes:',
+            'Review and contingency:', 'Risks, triggers, and alternatives:',
+            'Next 2-4 lessons to prepare after confirmation:',
+            'Teacher decision: A confirm / B change proportions / C change order or allocation / D change objectives / E add evidence'
+        )) {
+            if ($templatesContent -notmatch [regex]::Escape($planningTemplateField)) {
+                $failures.Add("templates.md missing exact Task 5 field: $planningTemplateField")
+            }
+        }
+
+        $planningTemplateFixture = @'
+## Capacity Calculation
+
+```text
+Calendar weeks:
+Lessons per week:
+Minutes per lesson:
+Theoretical lessons:
+Holidays/cancellations:
+Diagnosis and assessments:
+Revision and simulation:
+5-10% contingency:
+Usable teaching lessons:
+Goal-capacity conflict:
+```
+
+## Course-Cycle Framework
+
+```text
+Final outcomes:
+Minimum viable route:
+Recommended route:
+Enhanced route:
+Stages and lesson allocation:
+Dependency graph:
+Minimum prerequisite remediation:
+Concept/practice proportions:
+Module exit criteria:
+Assessment nodes:
+Review and contingency:
+Risks, triggers, and alternatives:
+Next 2-4 lessons to prepare after confirmation:
+Teacher decision: A confirm / B change proportions / C change order or allocation / D change objectives / E add evidence
+```
+'@ -replace "`r`n", "`n"
+        $normalizedTemplates = $templatesContent -replace "`r`n", "`n"
+        if (-not $normalizedTemplates.TrimEnd().EndsWith($planningTemplateFixture.Trim())) {
+            $failures.Add("templates.md must end with the exact Task 5 planning templates")
         }
     }
 
