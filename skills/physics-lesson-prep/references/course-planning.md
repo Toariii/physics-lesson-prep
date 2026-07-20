@@ -9,16 +9,19 @@ Enter S7 only after the S6 Evidence Package receives teacher option A, the prima
 Record and calculate these fields explicitly:
 
 - Calendar weeks and planned weeks available.
+- Planned teaching weeks after excluding calendar weeks that contain no teaching.
 - Lessons per week and Minutes per lesson.
 - Theoretical lessons before deductions.
 - Holidays/cancellations.
-- Diagnosis allocation.
-- Module/stage assessments allocation.
+- Diagnostic lessons allocation.
+- Module/stage assessment lessons allocation.
+- Module/stage assessments summary across the cycle.
 - Review/revision/simulation allocation.
-- A 5-10% contingency reserve.
+- Effective lesson-equivalents/adjustments for shortened or extended sessions.
+- A 5-10% contingency reserve, recorded as contingency percent and lesson equivalents.
 - Usable teaching lessons after every deduction.
 
-Do not count homework as lesson capacity. Homework is a separate learner-load assumption and may support, but never replace, scheduled teaching. For variable attendance, show a range and a conservative case. State every assumption, including partial weeks, shortened lessons, known events, expected absence, and rounding. Recalculate when an assumption changes.
+Use these equations: theoretical lessons = planned teaching weeks * lessons per week; usable lesson equivalents = theoretical lessons - cancellations - diagnosis - assessments - revision/simulation - contingency. Convert minutes to lesson equivalents when session lengths differ, apply Effective lesson-equivalents/adjustments transparently, and avoid double counting an event in more than one deduction. Do not count homework as lesson capacity. Homework is a separate learner-load assumption and may support, but never replace, scheduled teaching. For variable attendance, show a range and a conservative case. State every assumption, including partial weeks, shortened lessons, known events, expected absence, conversion basis, and rounding. Recalculate when an assumption changes.
 
 ## Goal-Capacity Conflict
 
@@ -29,6 +32,8 @@ When goals exceed usable capacity, do not fabricate capacity or silently compres
 - Enhanced route: requires more lesson capacity, homework capacity, or time.
 
 For each route, show the impact on goals, assessment readiness, deferred content, and risks. The teacher selects the route; the system does not choose by default. A minimum viable route states the core outcomes retained and exactly what is deferred. A recommended route includes enough explanation, practice, checking, and feedback to support the confirmed outcomes. An enhanced route identifies the additional lessons, homework, or calendar extension required.
+
+Record a Selected capacity route and its basis. When a capacity conflict exists, the teacher must explicitly select Minimum viable, Recommended, or Enhanced before confirmation; Option A is unavailable while a capacity conflict has no selected route. When no conflict exists, record either Recommended or `No conflict - confirmed framework` as the selected/default route and state the capacity basis. Carry the selected route and its implications into S8, including retained outcomes, deferred work, assessment consequences, added demands, and accepted risks.
 
 ## Course-Cycle Layers
 
@@ -99,7 +104,7 @@ Record each risk with a trigger and an alternative route, plus the state rollbac
 
 At S7, confirm the full course-cycle framework only. Prepare the next two to four lessons after confirmation: the first lesson is fully fixed, while lessons 2-4 remain adjustable using new evidence. Do not detail all future lessons, because later content must respond to learner performance, schedule changes, and assessment evidence.
 
-If a two-to-four-lesson batch has already been delivered, wait in S8 without regenerating it. After a lesson is taught, move to S9 for reflection and record updates before fixing the next first lesson.
+If a two-to-four-lesson batch has already been delivered, wait in S8 without regenerating it. S8 remains active through the current two-to-four-lesson batch. Lesson-level observations may be logged during S8 and can trigger urgent rollback to the earliest affected state, but they do not normally start S9. S9 begins only when the teacher reports the current batch taught or completed; then perform batch reflection and record updates before fixing the next first lesson.
 
 ## Course-Cycle Confirmation
 
@@ -111,4 +116,4 @@ Offer these exact teacher options:
 - D - change objectives and return to S2 or S7 according to impact.
 - E - add evidence and return to the earliest affected state from S1-S6.
 
-Only option A advances to S8. Record the selected option and any resulting rollback before producing lesson materials.
+Only option A advances to S8. Option A also requires the Selected capacity route and basis described above; if a capacity conflict exists, the explicit teacher-selected route is mandatory. Record the selected option, carry the selected route and its implications into S8, and record any resulting rollback before producing lesson materials.

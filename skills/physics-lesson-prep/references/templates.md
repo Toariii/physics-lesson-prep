@@ -116,14 +116,21 @@ Decision A confirm is available only when course identity/version, the assessmen
 
 ```text
 Calendar weeks:
+Planned teaching weeks:
 Lessons per week:
 Minutes per lesson:
 Theoretical lessons:
 Holidays/cancellations:
+Diagnostic lessons:
+Module/stage assessment lessons:
 Diagnosis and assessments:
 Revision and simulation:
+Effective lesson-equivalents/adjustments:
+Contingency percent:
+Contingency lesson equivalents:
 5-10% contingency:
 Usable teaching lessons:
+Calculation/usable formula:
 Goal-capacity conflict:
 ```
 
@@ -134,6 +141,8 @@ Final outcomes:
 Minimum viable route:
 Recommended route:
 Enhanced route:
+Selected capacity route:
+Selected route basis and implications:
 Stages and lesson allocation:
 Dependency graph:
 Minimum prerequisite remediation:

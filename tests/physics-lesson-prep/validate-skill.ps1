@@ -362,8 +362,18 @@ I will not produce a lesson until the actual course can be identified.
             'trigger and an alternative route', 'full course-cycle framework only',
             'next two to four lessons', 'first lesson is fully fixed',
             'lessons 2-4 remain adjustable', 'do not detail all future lessons',
-            'wait in S8 without regenerating', 'after a lesson is taught, move to S9',
-            'Only option A advances to S8'
+            'wait in S8 without regenerating', 'Only option A advances to S8',
+            'Planned teaching weeks', 'Diagnostic lessons', 'Module/stage assessment lessons',
+            'Effective lesson-equivalents/adjustments',
+            'theoretical lessons = planned teaching weeks * lessons per week',
+            'usable lesson equivalents = theoretical lessons - cancellations - diagnosis - assessments - revision/simulation - contingency',
+            'convert minutes to lesson equivalents', 'avoid double counting',
+            'contingency percent and lesson equivalents', 'Selected capacity route',
+            'Option A is unavailable while a capacity conflict has no selected route',
+            'carry the selected route and its implications into S8',
+            'S8 remains active through the current two-to-four-lesson batch',
+            'lesson-level observations', 'urgent rollback',
+            'S9 begins only when the teacher reports the current batch taught or completed'
         )) {
             if ($coursePlanningContent -notmatch [regex]::Escape($planningRule)) {
                 $failures.Add("course-planning.md missing required rule: $planningRule")
@@ -480,11 +490,16 @@ I will not produce a lesson until the actual course can be identified.
             'Minutes per lesson:', 'Theoretical lessons:', 'Holidays/cancellations:',
             'Diagnosis and assessments:', 'Revision and simulation:', '5-10% contingency:',
             'Usable teaching lessons:', 'Goal-capacity conflict:', '## Course-Cycle Framework',
+            'Planned teaching weeks:', 'Diagnostic lessons:',
+            'Module/stage assessment lessons:', 'Effective lesson-equivalents/adjustments:',
+            'Contingency percent:', 'Contingency lesson equivalents:',
+            'Calculation/usable formula:',
             'Final outcomes:', 'Minimum viable route:', 'Recommended route:', 'Enhanced route:',
             'Stages and lesson allocation:', 'Dependency graph:', 'Minimum prerequisite remediation:',
             'Concept/practice proportions:', 'Module exit criteria:', 'Assessment nodes:',
             'Review and contingency:', 'Risks, triggers, and alternatives:',
-            'Next 2-4 lessons to prepare after confirmation:',
+            'Next 2-4 lessons to prepare after confirmation:', 'Selected capacity route:',
+            'Selected route basis and implications:',
             'Teacher decision: A confirm / B change proportions / C change order or allocation / D change objectives / E add evidence'
         )) {
             if ($templatesContent -notmatch [regex]::Escape($planningTemplateField)) {
@@ -497,14 +512,21 @@ I will not produce a lesson until the actual course can be identified.
 
 ```text
 Calendar weeks:
+Planned teaching weeks:
 Lessons per week:
 Minutes per lesson:
 Theoretical lessons:
 Holidays/cancellations:
+Diagnostic lessons:
+Module/stage assessment lessons:
 Diagnosis and assessments:
 Revision and simulation:
+Effective lesson-equivalents/adjustments:
+Contingency percent:
+Contingency lesson equivalents:
 5-10% contingency:
 Usable teaching lessons:
+Calculation/usable formula:
 Goal-capacity conflict:
 ```
 
@@ -515,6 +537,8 @@ Final outcomes:
 Minimum viable route:
 Recommended route:
 Enhanced route:
+Selected capacity route:
+Selected route basis and implications:
 Stages and lesson allocation:
 Dependency graph:
 Minimum prerequisite remediation:
