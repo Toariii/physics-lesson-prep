@@ -1,0 +1,11 @@
+SKILL.md
+agents/openai.yaml
+references/state-machine.md
+references/intake-and-diagnosis.md
+references/curriculum-research.md
+references/source-validation.md
+references/course-planning.md
+references/material-packages.md
+references/reflection-and-records.md
+references/physics-audit.md
+references/templates.md
