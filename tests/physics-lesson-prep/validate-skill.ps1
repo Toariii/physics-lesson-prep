@@ -35,8 +35,11 @@ function Get-ReflectionPolicyIssues {
         'pseudonymous records must warn that identifiers and combined quasi-identifiers can re-identify a learner' = '(?is)\bpseudonym(?:ous|ized)\b.*\banonymous identifier\b.*\b(?:does not|cannot)\b.*\banonymity\b.*\bquasi-identifiers?\b.*\bre-identif'
         'privacy review must minimize and generalize quasi-identifiers' = '(?is)\bdata minimization review\b.*\bquasi-identifiers?\b.*\b(?:coarsen|generalize)\b'
         'retention, access, export, and policy controls must be explicit' = '(?is)\bretention (?:period|review)\b.*\bauthorized teacher or institution\b.*\bencryption\b.*\blocal law\b.*\blawful basis\b.*\bexports?\b.*\bapproval\b'
-        'next-batch evidence must allow success, error, sticking point, assessment, or observation' = '(?is)\brepresentative learning evidence\b.*\bsuccess\b.*\berror\b.*\bsticking point\b.*\bassessment\b.*\bobservation\b'
-        'homework evidence must be conditional and error-free progress must be allowed' = '(?is)\bhomework evidence only when homework was assigned\b.*\berror-free batch\b.*\badvance\b.*\bNever fabricate\b'
+        'reflection must contain both representative success and error entries' = '(?is)\brepresentative success entry\b.*\brepresentative error entry\b'
+        'truthful null error states must include scope, confidence, and a stability probe' = '(?is)\bnone observed in supplied evidence\b.*\bevidence scope\b.*\bconfidence\b.*\b(?:transfer|probe)\b.*\bstability\b.*\bNever (?:invent|fabricate)\b'
+        'homework must use a truthful null or class-assessment alternative' = '(?is)\bnot assigned\b.*\bclass or assessment evidence\b'
+        'next-batch gate must require error entry and approved adjustment decision' = '(?is)\bnext batch requires\b.*\brepresentative-error entry\b.*\bhomework or class or assessment evidence\b.*\bteacher-confirmed adjustment decision\b'
+        'continue-unchanged decisions must meet exit criteria and record rationale' = '(?is)\bcontinue unchanged\b.*\bexit criteria\b.*\bapproved no-change decision\b.*\brationale\b'
         'recovery must preserve and hash the damaged original and restore to a new path' = '(?is)\bpreserve the damaged original\b.*\bread-only\b.*\bhash\b.*\bnew path\b.*\bnever overwrite\b'
         'recovery must validate, preview, reconfirm, resolve conflicts, and retain an audit trail' = '(?is)\bvalidate (?:the )?backup structure and inventory\b.*\bprovenance\b.*\brecovered fields\b.*\bpreview\b.*\brenew teacher consent\b.*\bcompare and resolve conflicts\b.*\bonly replace the active record after\b.*\baudit trail\b'
         'rollback mappings must preserve S1-S9 routing' = '(?is)\bcourse identity or version returns to S1\b.*\bgoals return to S2\b.*\bprofile returns to S3\b.*\bconditions return to S4\b.*\bsource evidence returns to S5-S6\b.*\bcycle design returns to S7\b.*\breturns to S9\b'
@@ -52,8 +55,8 @@ function Get-ReflectionPolicyIssues {
     $contradictions = @{
         'unconditional write without consent' = '(?im)(?:^|[.!?]\s+)(?:always|automatically|immediately)\s+(?:write|save|create)\b(?![^.!?\r\n]{0,100}\b(?:permission|consent|approval)\b)'
         'identifier falsely guarantees anonymity' = '(?im)\banonymous identifier\b(?![^.!?\r\n]{0,100}\b(?:does not|cannot|never)\b)[^.!?\r\n]{0,100}\b(?:guarantees?|ensures?|makes?)\b[^.!?\r\n]{0,80}\b(?:anonymous|anonymity)\b'
-        'representative error is mandatory' = '(?im)\b(?:requires?|must include|mandatory)\b[^.!?\r\n]{0,80}\brepresentative error\b'
         'homework evidence is mandatory' = '(?im)(?![^.!?\r\n]{0,160}\bonly when\b)\b(?:requires?|must include|mandatory)\b[^.!?\r\n]{0,80}\bhomework evidence\b'
+        'adjustment confirmation may be bypassed' = '(?im)\b(?:may|can|should)\s+(?:bypass|skip)\b[^.!?\r\n]{0,80}\bteacher confirmation\b|\bapply\b[^.!?\r\n]{0,80}\bwithout teacher confirmation\b'
         'damaged records may be overwritten' = '(?im)(?<!never )\b(?:overwrite|replace)\b[^.!?\r\n]{0,80}\bdamaged (?:original|record)\b'
         'archive is mutable' = '(?im)\barchive\b[^.!?\r\n]{0,80}\b(?:mutable|editable|may be changed|can be changed)\b'
         'exports may proceed without approval' = '(?im)\bexports?\b[^.!?\r\n]{0,100}\bwithout (?:teacher )?approval\b'
@@ -659,9 +662,9 @@ Accepted alternative methods
 
         $mutants = @(
             @{ Text = 'An anonymous identifier guarantees anonymity.'; Expected = 'identifier falsely guarantees anonymity' },
-            @{ Text = 'The next batch requires a representative error.'; Expected = 'representative error is mandatory' },
             @{ Text = 'The next batch must include homework evidence.'; Expected = 'homework evidence is mandatory' },
-            @{ Text = 'Exports may proceed without approval.'; Expected = 'exports may proceed without approval' }
+            @{ Text = 'Exports may proceed without approval.'; Expected = 'exports may proceed without approval' },
+            @{ Text = 'The adjustment may bypass teacher confirmation.'; Expected = 'adjustment confirmation may be bypassed' }
         )
         foreach ($mutant in $mutants) {
             $mutantIssues = @(Get-ReflectionPolicyIssues -Content $mutant.Text)

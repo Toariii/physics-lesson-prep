@@ -49,7 +49,9 @@ Do not delete an original or source artifact without authority. Preserve copyrig
 
 ## One-To-One And Small-Group Reflection
 
-Before the next formal batch, collect completed and uncompleted content, independence, representative success, error or exact sticking point where present, timing, homework evidence only when homework was assigned, otherwise class or assessment evidence, learner feedback, and teacher judgment. Natural language is accepted: structure it into these fields, show the structured reflection, and wait for the teacher to confirm it. This confirmation is a hard gate.
+Before the next formal batch, collect completed and uncompleted content, independence, a representative success entry, a representative error entry, exact sticking point, timing, homework evidence, learner feedback, and teacher judgment. Both success and error entries are mandatory record fields, while their values must remain truthful. The sticking point may be recorded as none when none is supported by the supplied evidence. Natural language is accepted: structure it into these fields, show the structured reflection, and wait for the teacher to confirm it. This confirmation is a hard gate.
+
+If no error was observed, record the representative error entry as `none observed in supplied evidence`, then state the evidence scope, confidence, and a planned transfer task or probe to test stability. Never invent or fabricate an error. If no homework was assigned, record homework evidence as `not assigned`; the reflection and next-batch decision still require class or assessment evidence.
 
 ## Regular-Class Evidence
 
@@ -90,7 +92,9 @@ Every change-history entry records timestamp, before, after, reason, teacher con
 
 ## Next-Batch Gate
 
-For one-to-one or small-group teaching, the next batch requires prior batch reflection, representative learning evidence consisting of a success, error, sticking point, or completed assessment or observation, an approved adjustment or confirmed decision to continue unchanged, and no unresolved proposed changes. Require homework evidence only when homework was assigned; otherwise use class or assessment evidence. An error-free batch may advance when the available evidence supports the mastery judgment. Never fabricate an error, homework result, observation, assessment, or mastery claim to satisfy the gate. For a regular class, require at least two evidence items from the regular-class list.
+For one-to-one or small-group teaching, the next batch requires prior batch reflection, a representative-success entry, a representative-error entry, homework or class or assessment evidence, a teacher-confirmed adjustment decision, and no unresolved proposed changes. Homework evidence is substantive only when homework was assigned; otherwise its truthful `not assigned` entry must be paired with class or assessment evidence.
+
+An error-free batch may advance when the representative-error entry uses the truthful null state and the supplied evidence supports the mastery judgment. The adjustment decision may be `continue unchanged` only when evidence meets the confirmed exit criteria; record it as an approved no-change decision with rationale, not as a bypass of teacher confirmation. Never fabricate an error, homework result, observation, assessment, mastery claim, or adjustment rationale to satisfy the gate. For a regular class, require at least two evidence items from the regular-class list.
 
 If evidence is insufficient, provide only a diagnostic, a data-collection template, or a clearly labeled provisional outline; do not produce a formal batch. Apply this gate at batch level, normally after each two-to-four-lesson batch rather than after every isolated lesson.
 
