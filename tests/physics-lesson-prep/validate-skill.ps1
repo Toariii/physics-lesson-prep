@@ -27,6 +27,36 @@ function Test-OrderedPhrases {
     return $true
 }
 
+function Get-S0PolicyIssues {
+    param([string]$Content)
+
+    $issues = [System.Collections.Generic.List[string]]::new()
+    $semanticRequirements = @{
+        'S0 must require an explicit record choice before advancing' = '(?is)\bS0\b.*\bexplicit\b.*\bnew anonymous\b.*\bexisting\b.*\btemporary consultation\b.*\bbefore advancing\b'
+        'S0 must allow a non-advancing next-gate preview' = '(?is)\bS0\b.*\bnon-advancing preview\b.*\bnext gate.{0,80}(?:questions|information)\b'
+        'S0 preview must keep the current stage at S0' = '(?is)\bcurrent stage (?:remains|stays) S0\b'
+        'S0 preview must hold answers pending the record choice' = '(?is)\banswers? (?:are|will be) held pending (?:the )?S0 choice\b'
+        'S0 preview must not complete or advance a later state' = '(?is)\bno later state (?:is|has been|has) (?:completed or advanced|advanced)\b'
+        'S0 preview must forbid formal output and source research' = '(?is)\bS0\b.*\b(?:must not|never)\b.*\b(?:perform )?(?:source |S5 )?research\b.*\bformal\b'
+    }
+    foreach ($entry in $semanticRequirements.GetEnumerator()) {
+        if ($Content -notmatch $entry.Value) {
+            $issues.Add($entry.Key)
+        }
+    }
+
+    $contradictions = @{
+        'S0 is limited to the record choice' = '(?im)\bS0\b[^.!?\r\n]{0,120}\b(?:only|solely)\b[^.!?\r\n]{0,80}\b(?:record (?:choice|options?)|privacy summary)\b'
+        'S0 preview completes S1' = '(?im)\bS0\b[^.!?\r\n]{0,160}\bpreview\b[^.!?\r\n]{0,120}(?<!not )\bcompletes? S1\b'
+    }
+    foreach ($entry in $contradictions.GetEnumerator()) {
+        if ($Content -match $entry.Value) {
+            $issues.Add("contradiction: $($entry.Key)")
+        }
+    }
+    return @($issues)
+}
+
 function Get-ReflectionPolicyIssues {
     param([string]$Content)
 
@@ -229,6 +259,15 @@ I will not produce a lesson until the actual course can be identified.
         }
 
         foreach ($intakeRule in @(
+            'do not waste the turn',
+            'one to three',
+            'most material S1, S2, or S3 questions',
+            'no more than five',
+            'sparse university request',
+            'formal course code',
+            'exactly two or three books',
+            'international-version conflict',
+            'current official guide',
             'if S0 is unresolved',
             'temporary consultation',
             'new unsaved anonymous record',
@@ -474,6 +513,26 @@ I will not produce a lesson until the actual course can be identified.
         )) {
             if ($coursePlanningContent -notmatch [regex]::Escape($confirmationOption)) {
                 $failures.Add("course-planning.md missing exact confirmation option: $confirmationOption")
+            }
+        }
+    }
+
+    $stateFile = Join-Path $resolvedSkillPath "references/state-machine.md"
+    if (Test-Path -LiteralPath $stateFile -PathType Leaf) {
+        $stateContent = Get-Content -LiteralPath $stateFile -Raw
+        $s0PolicyContent = @($skillContent, $stateContent, $intakeContent) -join "`n"
+        foreach ($policyIssue in @(Get-S0PolicyIssues -Content $s0PolicyContent)) {
+            $failures.Add("S0 policy issue: $policyIssue")
+        }
+
+        $s0Mutants = @(
+            @{ Text = $s0PolicyContent + "`nS0 only allows the record choice."; Expected = 'S0 is limited to the record choice' },
+            @{ Text = $s0PolicyContent + "`nThe S0 preview completes S1."; Expected = 'S0 preview completes S1' }
+        )
+        foreach ($mutant in $s0Mutants) {
+            $detected = @(Get-S0PolicyIssues -Content $mutant.Text) -join "`n"
+            if ($detected -notmatch [regex]::Escape($mutant.Expected)) {
+                $failures.Add("S0 policy mutant escaped detection: $($mutant.Expected)")
             }
         }
     }

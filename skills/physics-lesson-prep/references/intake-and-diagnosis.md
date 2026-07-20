@@ -16,6 +16,12 @@ First require the teacher to choose one route for this request:
 - **Existing record:** identify the existing record by its anonymous ID; do not request a learner name.
 - **Temporary consultation:** use facts only in the current conversation and do not save a record.
 
+If the teacher already supplied useful course facts, do not waste the turn. Extract and display all confirmed facts, ask the record choice, and add one to three of the most material S1, S2, or S3 questions while keeping the total at no more than five. Label this as a non-advancing collection preview: answers are held pending the S0 choice, the current stage stays S0, and the preview does not complete S1, S2, S3, or any later state.
+
+For a sparse university request, the preview may request the formal course code, syllabus or weekly scope, assigned-text evidence, assessment information, or a teaching-relevant artifact. It may state that a later no-assigned-text route will compare exactly two or three books, but it must not perform that research at S0. For an international-version conflict, request the current official guide and version or examination-year evidence; do not resolve the conflict or start source research at S0. Formal course, lesson, worksheet, and question-pack output remains forbidden.
+
+An S0 preview may therefore look like this without replacing the separate S1 rigid-body fixture below: show `Current stage: S0 record route unresolved`, list the supplied topic or course facts under `Confirmed`, ask for the new anonymous, existing anonymous-ID, or temporary consultation choice, then ask up to three material next-gate questions. End by stating that the answers will be held pending the S0 choice and no later state has advanced.
+
 Also confirm the teaching setting and whether the teacher permits the supplied information to be used for planning. Permission to discuss or process information is distinct from permission to save it locally. Ask for save permission only when a file write is proposed.
 
 Use anonymous IDs such as `PHY-2026-014`, `HS-IB-PHY-007`, or `UNI-MECH-021`. IDs may encode a broad course family and sequence number but must not contain personal identifiers.

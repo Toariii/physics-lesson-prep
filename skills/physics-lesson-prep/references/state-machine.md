@@ -4,7 +4,7 @@ Use this contract to select the earliest incomplete state, constrain the current
 
 | State | Entry condition | Allowed output | Forbidden output | Completion evidence | Teacher confirmation | Rollback target |
 |---|---|---|---|---|---|---|
-| S0 | No record decision for the current request | Record options and privacy summary | Lesson content; file saving without separate permission | Explicit new anonymous/existing/temporary consultation choice | Record choice required even for temporary or no-write work; save permission is separate | None |
+| S0 | No record decision for the current request | Record options and privacy summary; extract and display confirmed facts; non-advancing preview or collection of up to the next gate's most important questions | Formal lesson, cycle, or question-pack output; source research; file saving without separate permission | Explicit new anonymous/existing/temporary consultation choice | Record choice required even for temporary or no-write work; save permission is separate | None |
 | S1 | Course identity incomplete | 1-5 identity questions and collection checklist | Curriculum assumptions and lessons | Identifiable course boundary | Confirm conflicts | S0 |
 | S2 | Goal incomplete | Goal questions and conflict analysis | Course plan | Primary goal, date, success criteria | Confirm priority | S1 |
 | S3 | Evidence absent or weak | Evidence request; diagnostic blueprint, confirmed diagnostic, result collection, learner profile | Formal cycle plan before a credible artifact or completed diagnostic | Credible artifact or completed diagnostic results supporting a learner profile | Confirm blueprint before diagnostic creation or administration | S1/S2 |
@@ -22,7 +22,8 @@ Use this contract to select the earliest incomplete state, constrain the current
 - Record teacher decisions explicitly. Silence, ambiguity, and an unreviewed draft do not count as confirmation.
 - Keep evidence traceable to the supplied artifact, completed diagnostic, validated source, or recorded teacher decision.
 - Advance one gate at a time unless the current turn contains complete, non-conflicting evidence for multiple consecutive states.
-- At S0, every new request requires an explicit new anonymous record, named existing record, or temporary consultation choice. Permission to save a file is a separate decision.
+- At S0, every new request requires an explicit new anonymous record, named existing record, or temporary consultation choice before advancing. Permission to save a file is a separate decision.
+- At S0, do not waste facts already supplied: extract and display every confirmed fact and, within the turn's one-to-five-question total, allow a non-advancing preview or collection of the next gate's most important questions. Clearly say the answers are held pending the S0 choice, the current stage stays S0, and no later state is completed or advanced. This preview may describe evidence or a later research route, but it must not perform source research or produce formal lesson, cycle, worksheet, or question-pack output.
 - At S3, use this subflow when evidence is absent: draft a diagnostic blueprint -> obtain teacher confirmation -> create or administer the diagnostic -> collect results -> derive the learner profile. Do not advance to S4 until a credible artifact or completed diagnostic supports that profile.
 - At S6, only A advances to S7. B stays S6 for revised-order confirmation unless the revision changes research, then return to S5; C returns to S5; D stays or returns to S5 while awaiting material.
 - At S7, only A advances to S8. B-D stay S7 for revision; E rolls back to the earliest affected state from S1 through S6.

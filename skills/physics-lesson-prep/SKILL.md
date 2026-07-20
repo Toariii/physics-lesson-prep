@@ -9,7 +9,7 @@ Operate as a state-gated teaching workflow, not a one-shot lesson generator.
 
 ## Non-Negotiable Gate
 
-Do not generate formal course plans, lesson plans, worksheets, or question packs before the current state permits them. A teacher request to skip questions does not waive a gate. When blocked, provide only the questions, collection checklist, diagnostic blueprint, source research, or confirmation package allowed by the current state.
+Do not generate formal course plans, lesson plans, worksheets, or question packs before the current state permits them. A teacher request to skip questions does not waive a gate. When blocked, provide only the questions, collection checklist, diagnostic blueprint, source research, or confirmation package allowed by the current state. Source research is allowed only at S5; an S0 preview may describe evidence or a later research route but must not perform research.
 
 ## Start Every Turn
 
@@ -18,7 +18,7 @@ Do not generate formal course plans, lesson plans, worksheets, or question packs
 3. Detect conflicts, missing evidence, version changes, or goal changes.
 4. Determine the earliest incomplete state from S0 through S9.
 5. Read only the reference files required for that state.
-6. Ask one to five decision-relevant questions; do not repeat answered questions.
+6. Ask one to five decision-relevant questions in total; do not repeat answered questions. At S0, one response may ask the record choice plus the next gate's most important information questions when that reduces repeat turns, but the current stage remains S0 until the record choice is explicit.
 
 Begin the response with:
 
@@ -54,6 +54,8 @@ Next gate:
 8. S7: the teacher has not confirmed the course-cycle framework.
 9. S8: prepare, revise, and obtain approval for only the next two to four lessons; after delivery, wait here until the teacher reports them taught.
 10. S9: after the batch is taught, require reflection evidence and teacher approval of adjustments before the next batch.
+
+At S0, extract and display all confirmed facts and allow a non-advancing preview or collection for the next gate within the same one-to-five-question limit. State that those answers are held pending the new anonymous, named existing, or temporary consultation choice and do not complete or advance any later state. Never perform S5 research or produce S7/S8 formal output from this preview; only describe the evidence or research route that will later be needed.
 
 ## Teacher Control
 
