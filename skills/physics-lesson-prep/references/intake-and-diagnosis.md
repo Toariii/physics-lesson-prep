@@ -10,23 +10,24 @@
 
 ## S0 Anonymous Record Intake
 
-First require the teacher to choose one route for this request:
+First require the teacher to choose one route for this request. Show the options in Chinese by default:
 
 - **New anonymous record:** create a new course record only after separate save permission is given.
 - **Existing record:** identify the existing record by its anonymous ID; do not request a learner name.
+- **Local named roster record:** store the student's real name only in a teacher-provided local Excel roster after explicit permission; avoid displaying the real name in later agent messages unless the teacher asks for roster maintenance.
 - **Temporary consultation:** use facts only in the current conversation and do not save a record.
 
-If the teacher already supplied useful course facts, do not waste the turn. Extract and display all confirmed facts, ask the record choice, and add one to three of the most material S1, S2, or S3 questions while keeping the total at no more than five. Label this as a non-advancing collection preview: answers are held pending the S0 choice, the current stage stays S0, and the preview does not complete S1, S2, S3, or any later state.
+If the teacher already supplied useful course facts, do not waste the turn. Extract and display all confirmed facts, ask the record choice, and add one to three of the most material S1, S2, or S3 questions while keeping the total at no more than five. Label this as a non-advancing collection preview in Chinese: answers are held pending the S0 choice, the internal state stays S0, and the preview does not complete S1, S2, S3, or any later state. Do not show `Current stage: S0` to ordinary teachers; use `当前步骤: 选择课程档案方式`.
 
 For a sparse university request, the preview may request the formal course code, syllabus or weekly scope, assigned-text evidence, assessment information, or a teaching-relevant artifact. It may state that a later no-assigned-text route will compare exactly two or three books, but it must not perform that research at S0. For an international-version conflict, request the current official guide and version or examination-year evidence; do not resolve the conflict or start source research at S0. Formal course, lesson, worksheet, and question-pack output remains forbidden.
 
-An S0 preview may therefore look like this without replacing the separate S1 rigid-body fixture below: show `Current stage: S0 record route unresolved`, list the supplied topic or course facts under `Confirmed`, ask for the new anonymous, existing anonymous-ID, or temporary consultation choice, then ask up to three material next-gate questions. End by stating that the answers will be held pending the S0 choice and no later state has advanced.
+An S0 preview may therefore look like this without replacing the separate S1 rigid-body fixture below: show `当前步骤: 选择课程档案方式`, list the supplied topic or course facts under `已确认`, ask for the new anonymous, existing anonymous-ID, local named roster, or temporary consultation choice, then ask up to three material next-gate questions. End by stating in Chinese that the answers will be held pending the S0 choice and no later state has advanced.
 
-Also confirm the teaching setting and whether the teacher permits the supplied information to be used for planning. Permission to discuss or process information is distinct from permission to save it locally. Ask for save permission only when a file write is proposed.
+Also confirm the teaching setting and whether the teacher permits the supplied information to be used for planning. Permission to discuss or process information is distinct from permission to save it locally. Ask for save permission only when a file write, local Excel roster update, PDF export, or PPT export is proposed.
 
 Use anonymous IDs such as `PHY-2026-014`, `HS-IB-PHY-007`, or `UNI-MECH-021`. IDs may encode a broad course family and sequence number but must not contain personal identifiers.
 
-Do not collect or store real names, contacts, home addresses, credentials, medical documents, unrelated family information, initials, student numbers, email addresses, phone numbers, or exact birth dates.
+Do not collect or store contacts, home addresses, credentials, medical documents, unrelated family information, initials, student numbers, email addresses, phone numbers, or exact birth dates. Real names are allowed only in the local named roster route, only in the teacher-provided Excel file, and only after a write preview and explicit permission. Do not put real names in filenames, public examples, research records, exported PDFs/PPTs, or ordinary lesson-prep messages unless the teacher explicitly requests a roster view.
 
 ## S1 Domestic School Intake
 
@@ -159,22 +160,22 @@ Skip a question when the exact field is already confirmed by a credible artifact
 
 Use the exact S1 example below only after S0 has been resolved as a temporary consultation or a new unsaved anonymous record that has not yet been created or saved. If S0 is unresolved, ask the S0 choice first and do not use the example. Do not use this fixture for an existing record; an existing-record response must show its anonymous ID and current state.
 
-If the request is “Prepare a lesson on rigid-body motion” but course identity is insufficient, respond exactly as follows:
+If the request is “Prepare a lesson on rigid-body motion” but course identity is insufficient after S0 has been resolved, respond exactly as follows:
 
 ```text
-Course record: not created
-Current stage: S1 learner and course identity
-Confirmed: Topic is rigid-body motion
-Missing: learner stage, actual course, curriculum or course code, current module, teaching context
-This turn: collect the minimum course identity
-Next gate: identify a traceable course boundary
+课程档案: 未创建
+当前步骤: 确认学生和课程信息
+已确认: 主题是刚体运动
+缺少信息: 学生阶段、实际课程、课程体系或课程代码、当前单元、教学场景
+本轮处理: 收集最低限度的课程身份信息
+下一步: 确认可追踪的课程边界
 
-Please provide:
-1. The learner's country/region and grade or university stage.
-2. The full course name, system/examination board, or university course code.
-3. The current textbook, syllabus, course page, or table of contents.
+请提供:
+1. 学生所在国家/地区和年级或大学阶段。
+2. 完整课程名称、课程体系/考试局，或大学课程代码。
+3. 当前教材、考纲、课程页面或目录。
 
-I will not produce a lesson until the actual course can be identified.
+在实际课程可以确认前，我不会生成正式课程。
 ```
 
 When confirmed facts conflict, do not reconcile them silently. Use this output format:
@@ -183,5 +184,5 @@ When confirmed facts conflict, do not reconcile them silently. Use this output f
 Evidence A: [source, date, and claim]
 Evidence B: [source, date, and conflicting claim]
 Impact: [which gate, scope, source, schedule, or deliverable changes]
-Teacher decision: [the explicit choice or clarification required]
+教师决定: [需要老师明确选择或澄清的内容]
 ```

@@ -11,6 +11,7 @@ $repositoryRoot = Split-Path -Parent $PSScriptRoot
 $structuralValidator = Join-Path $repositoryRoot "tests/physics-lesson-prep/validate-skill.ps1"
 $sourceInput = if ($Source) { $Source } else { "skills/physics-lesson-prep" }
 $allowedRootInput = "C:/Users/admin/.codex/skills"
+$backupRootInput = "C:/Users/admin/.codex/skill-backups/physics-lesson-prep"
 $tempPrefix = "physics-lesson-prep-install-"
 
 function Resolve-RepositoryPath {
@@ -82,14 +83,30 @@ function Assert-SafeBackup {
     param([Parameter(Mandatory)][string]$Path)
 
     Assert-DestinationRoot
+    Assert-BackupRoot
     $parent = Split-Path -Parent $Path
     $leaf = Split-Path -Leaf $Path
-    if (-not $parent.Equals($script:allowedRootPath, [System.StringComparison]::OrdinalIgnoreCase) -or
-        -not $leaf.StartsWith("$($script:requiredLeaf).backup-", [System.StringComparison]::Ordinal)) {
+    if (-not $parent.Equals($script:backupRootPath, [System.StringComparison]::OrdinalIgnoreCase) -or
+        -not $leaf.StartsWith("backup-", [System.StringComparison]::Ordinal)) {
         throw "Refusing unsafe backup operation: $Path"
     }
     if (Test-Path -LiteralPath $Path) {
         Assert-NoReparsePoints -Path $Path -Description "Content backup"
+    }
+}
+
+function Assert-BackupRoot {
+    if (-not (Test-Path -LiteralPath $script:backupRootPath -PathType Container)) {
+        New-Item -ItemType Directory -Path $script:backupRootPath | Out-Null
+    }
+    $resolvedBackupRoot = (Resolve-Path -LiteralPath $script:backupRootPath -ErrorAction Stop).Path.TrimEnd('\', '/')
+    if (-not $resolvedBackupRoot.Equals($script:backupRootPath, [System.StringComparison]::OrdinalIgnoreCase)) {
+        throw "Backup root changed during installation: $resolvedBackupRoot"
+    }
+    $backupItem = Get-Item -LiteralPath $script:backupRootPath -Force
+    if (-not $backupItem.PSIsContainer -or
+        ($backupItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) {
+        throw "Backup root is not a safe directory: $script:backupRootPath"
     }
 }
 
@@ -196,6 +213,7 @@ if (-not (Test-Path -LiteralPath $destinationParentInput -PathType Container)) {
 }
 
 $allowedRootPath = (Resolve-Path -LiteralPath $allowedRootInput -ErrorAction Stop).Path.TrimEnd('\', '/')
+$backupRootPath = [System.IO.Path]::GetFullPath($backupRootInput).TrimEnd('\', '/')
 $destinationParentPath = (Resolve-Path -LiteralPath $destinationParentInput -ErrorAction Stop).Path.TrimEnd('\', '/')
 if (-not $destinationParentPath.Equals($allowedRootPath, [System.StringComparison]::OrdinalIgnoreCase)) {
     throw "Destination parent must be the approved skills root: $allowedRootPath"
@@ -240,7 +258,7 @@ try {
     $hadExistingDestination = Test-Path -LiteralPath $destinationPath -PathType Container
     if ($hadExistingDestination) {
         Assert-NoReparsePoints -Path $destinationPath -Description "Existing destination"
-        $backupPath = "$destinationPath.backup-$(Get-Date -Format 'yyyyMMdd-HHmmssfff')"
+        $backupPath = Join-Path $backupRootPath "backup-$(Get-Date -Format 'yyyyMMdd-HHmmssfff')"
         Assert-SafeBackup -Path $backupPath
         Copy-TreeContent -From $destinationPath -To $backupPath
         Assert-SafeBackup -Path $backupPath

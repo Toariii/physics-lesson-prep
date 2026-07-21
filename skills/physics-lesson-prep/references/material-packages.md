@@ -6,6 +6,8 @@ S8 may begin only with the confirmed Course Evidence Package, confirmed primary 
 
 Every batch uses a common header recording the anonymous course record, current state, course/version, primary textbook and chapters, course-cycle stage, learner evidence used, package mode, lessons in the batch, source status, release label, and teacher checks still required.
 
+Write the common header in Chinese for teachers. Keep course codes, book titles, formulas, source titles, and student-facing English problem prompts in their original language. Do not show `Current state: S8`; use `当前步骤: 准备本次课程`.
+
 ## Concept-Focused Package
 
 A concept-focused package contains all of the following:
@@ -48,6 +50,8 @@ A competition or enrichment package contains context with minimal information, m
 
 Produce a clean student version and a separate teacher version. The student version contains no hidden commentary, answers, marking guidance, anticipated-error notes, or diagnostic interpretation. Keep answers, marking points, anticipated errors and responses, branch guidance, and diagnostic interpretations in the teacher version. Add accessibility, language support, notation glossaries, visual alternatives, or accommodation notes when relevant to the confirmed learner and setting.
 
+If the teacher has not confirmed bilingual teaching, default explanations, headers, instructions, and reply prompts to Chinese. Preserve English only where it is the learning target, such as English problem stems, vocabulary, formulas, course codes, source names, or textbook names.
+
 ## Question Provenance
 
 For every question record title or source, year/series/edition and item when applicable, official/licensed/original/adapted status, author or institution, URL or bibliographic record where available, license/reuse status, intended use, and verification status. Never label an unknown source as official or as a past-paper question. Respect copyright and quotation limits; prefer lawful links, bibliographic references, licensed use, or genuinely original work.
@@ -76,6 +80,17 @@ Where more than one result is defensible, state the alternative acceptable range
 ## Lesson One Versus Lessons Two To Four
 
 Lesson 1 is fully fixed for delivery. Lessons 2-4 are adjustable branches driven by lesson-level evidence; do not create a fully detailed future course. Preserve the confirmed framework, selected capacity route, evidence basis, dependencies, and exit criteria. If an earlier lesson changes the diagnosis or pace, revise the affected later draft and record the reason; do not silently regenerate the whole batch.
+
+## Teacher Decision And Export Options
+
+End each prepared lesson or batch with Chinese teacher decisions:
+
+```text
+教师决定: 批准第1节课 / 修改第1节课 / 暂不使用
+导出选项: 生成PDF / 生成PPT / PDF和PPT都生成 / 暂不导出
+```
+
+If the teacher chooses an export, require an output path and read `reflection-and-records.md` before writing. Default exported files exclude real names and use the anonymous course ID or generic learner label. If the teacher also uses a local named roster, offer a separate roster update after the lesson is taught.
 
 ## Teacher-Review Label
 

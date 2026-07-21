@@ -2,7 +2,7 @@
 
 ## File-Write Consent Gate
 
-Before any write, obtain explicit permission for the save directory, pseudonymous or anonymous-minimized identifier, exact fields and files, retention choice, access scope, and whether originals may be copied or must remain reference only. Preview changes before writing and report every changed file afterward. Temporary consultation means no save. Never auto write a learner or course record, and never store passwords, tokens, credentials, authentication codes, or other secrets.
+Before any write, obtain explicit permission for the save directory or file path, pseudonymous or anonymous-minimized identifier, exact fields and files, retention choice, access scope, and whether originals may be copied or must remain reference only. Preview changes before writing and report every changed file afterward. Temporary consultation means no save. Never auto write a learner record, course record, local roster, PDF, or PPT, and never store passwords, tokens, credentials, authentication codes, or other secrets.
 
 Permission applies only to the previewed write. If the directory, identifier, fields, files, or source-artifact treatment changes, preview again and renew permission.
 
@@ -35,11 +35,43 @@ Preserve histories. Append or version changes rather than overwriting prior evid
 
 Allowed fields are teaching-relevant and pseudonymous or anonymous-minimized: region, learner stage, education system, course identity, goals, evidence summaries, representative errors, mastery, progress, workload, and accommodations needed for teaching. Before saving, conduct a data minimization review of quasi-identifiers including region, stage, course, school, accommodations, and distinctive error patterns; omit, coarsen, or generalize them where possible. Store a school name only when essential, specifically consented, and permitted by institution policy.
 
-Prohibited fields include real names in filenames or records; phone numbers, email addresses, social accounts, government or school identifiers, addresses, credentials or authentication data, secrets, original medical records, financial details, unrelated family information, identifiable information about other students, and full raw school-system screenshots. A school name may be used temporarily for research but is not saved by default; remove it from external examples and cases.
+Prohibited fields in pseudonymous course records include real names in filenames or records; phone numbers, email addresses, social accounts, government or school identifiers, addresses, credentials or authentication data, secrets, original medical records, financial details, unrelated family information, identifiable information about other students, and full raw school-system screenshots. A school name may be used temporarily for research but is not saved by default; remove it from external examples and cases. Real names may be stored only in the teacher-controlled local roster described below, never in public examples, source records, exported lesson PDFs/PPTs, or default chat summaries.
 
 Set a retention period and review date, with a teacher-controlled deletion or read-only archive decision when the period ends, subject to institutional requirements. Limit access to the authorized teacher or institution, and use device or workspace encryption and access controls where available. The teacher must confirm the applicable local law, institution policy, lawful basis, and guardian or learner consent where required. This is operational skill guidance, not legal advice or a claim of compliance.
 
 Before export, strip direct identifiers and unnecessary quasi-identifiers, preview the export, and obtain teacher approval. Record the export recipient, purpose, fields, and decision.
+
+## Local Named Roster Excel
+
+Use the local named roster route when the teacher needs practical lookup by a real student name. Require the teacher to provide a local `.xlsx` path or approve creating one. Do not choose a path silently. The roster is teacher-controlled, more identifiable than the pseudonymous course record, and should remain local.
+
+Required roster columns:
+
+```text
+姓名
+年级
+科目或学习体系
+一共几节课
+学到哪里了
+下一节课重点
+最近一次上课日期
+匿名课程ID
+备注
+```
+
+Before creating or updating the roster, show a `本地档案写入预览` with the exact file path, row identity, fields to create or update, old value when known, new value, excluded sensitive fields, and the teacher reply options `确认写入本地档案`, `修改后再写入`, or `不保存档案`. After every taught lesson or approved next-lesson adjustment, offer to update `学到哪里了`, `下一节课重点`, `一共几节课`, and `最近一次上课日期`.
+
+Do not use the real name as the only internal key. Pair the roster row with an anonymous course ID so the agent can discuss lessons without displaying the name. If the teacher asks to retrieve by name, use the roster only after the teacher supplies or confirms the local file path.
+
+## Optional PDF And PPT Export
+
+After a teacher decision that approves a diagnostic, course framework, lesson plan, worksheet, answer key, or course summary, ask whether to export materials:
+
+```text
+导出选项: 生成PDF / 生成PPT / PDF和PPT都生成 / 暂不导出
+```
+
+Export only after the teacher chooses an option, provides or approves the output path, and confirms whether student real names are excluded. Default exports must exclude real names and use the anonymous course ID or a generic learner label. Preserve book titles, course codes, formulas, and English student-facing problem prompts in their original language. Report the generated file path and note any unresolved local formatting or school-policy checks.
 
 ## Source-Artifact Handling
 

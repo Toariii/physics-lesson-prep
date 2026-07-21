@@ -144,8 +144,20 @@ if ($resolvedSkillPath) {
             $skillContent -notmatch '(?im)^\s*(?:[-*+]\s+)?Do not generate formal\b.*$') {
             $failures.Add("SKILL.md missing structured formal-material gate")
         }
-        if ($skillContent -notmatch '(?im)^Current stage:\s*.*$') {
-            $failures.Add("SKILL.md missing status field: Current stage:")
+        if ($skillContent -notmatch '(?im)^当前步骤:\s*.*$') {
+            $failures.Add("SKILL.md missing Chinese teacher-facing status field: 当前步骤:")
+        }
+        foreach ($teacherFacingRule in @(
+            'Default teacher-facing output to Chinese',
+            'Do not expose internal state labels',
+            'local named roster record',
+            '生成PDF',
+            '生成PPT',
+            '批准第1节课'
+        )) {
+            if ($skillContent -notmatch [regex]::Escape($teacherFacingRule)) {
+                $failures.Add("SKILL.md missing teacher-facing rule: $teacherFacingRule")
+            }
         }
         if ($skillContent -match '(?i)\bTODO\b|\bTBD\b|\bFIXME\b|\[TODO') {
             $failures.Add("SKILL.md contains a placeholder")
@@ -205,6 +217,15 @@ if ($resolvedSkillPath) {
         'teacher-review-ready',
         'explicit permission',
         'real names',
+        'Local Named Roster Excel',
+        '姓名',
+        '科目或学习体系',
+        '学到哪里了',
+        'Optional PDF And PPT Export',
+        '导出选项',
+        '暂不导出',
+        '当前步骤',
+        '确认学生和课程信息',
         'at least two',
         'Adjustment level',
         'Course Summary'
@@ -239,19 +260,19 @@ if ($resolvedSkillPath) {
         }
 
         $rigidBodyFixture = @'
-Course record: not created
-Current stage: S1 learner and course identity
-Confirmed: Topic is rigid-body motion
-Missing: learner stage, actual course, curriculum or course code, current module, teaching context
-This turn: collect the minimum course identity
-Next gate: identify a traceable course boundary
+课程档案: 未创建
+当前步骤: 确认学生和课程信息
+已确认: 主题是刚体运动
+缺少信息: 学生阶段、实际课程、课程体系或课程代码、当前单元、教学场景
+本轮处理: 收集最低限度的课程身份信息
+下一步: 确认可追踪的课程边界
 
-Please provide:
-1. The learner's country/region and grade or university stage.
-2. The full course name, system/examination board, or university course code.
-3. The current textbook, syllabus, course page, or table of contents.
+请提供:
+1. 学生所在国家/地区和年级或大学阶段。
+2. 完整课程名称、课程体系/考试局，或大学课程代码。
+3. 当前教材、考纲、课程页面或目录。
 
-I will not produce a lesson until the actual course can be identified.
+在实际课程可以确认前，我不会生成正式课程。
 '@ -replace "`r`n", "`n"
         $normalizedIntake = $intakeContent -replace "`r`n", "`n"
         if (-not $normalizedIntake.Contains($rigidBodyFixture.Trim())) {
@@ -552,6 +573,7 @@ I will not produce a lesson until the actual course can be identified.
             '## Question Provenance',
             '## Standard Solution Contract',
             '## Lesson One Versus Lessons Two To Four',
+            '## Teacher Decision And Export Options',
             '## Teacher-Review Label'
         )
         if (-not (Test-ExactHeadings -Lines $materialLines -ExpectedHeadings $expectedHeadings)) {
@@ -674,6 +696,8 @@ Accepted alternative methods
             '## File-Write Consent Gate',
             '## Suggested Anonymous Record Structure',
             '## Allowed And Prohibited Fields',
+            '## Local Named Roster Excel',
+            '## Optional PDF And PPT Export',
             '## Source-Artifact Handling',
             '## One-To-One And Small-Group Reflection',
             '## Regular-Class Evidence',
@@ -743,18 +767,18 @@ Accepted alternative methods
         }
 
         foreach ($templateField in @(
-            'Course record:', 'Current stage:', 'Confirmed:', 'Missing:', 'This turn:', 'Next gate:',
-            'Anonymous record:', 'Course identity:', 'Primary and secondary goals:',
-            'Target date and success criteria:', 'Learning evidence:',
-            'Lesson duration and weekly frequency:', 'Available weeks and deadlines:',
-            'Teaching mode and proportions:', 'Setting, class size, and delivery:',
-            'Homework capacity:', 'Equipment and access:', 'Required outputs:',
-            'Unresolved conditions:', 'Teacher decision: confirm / revise / provide missing information',
-            'Diagnostic purpose:', 'Course boundary:', 'Prerequisites covered:',
-            'Core content covered:', 'Ability dimensions:', 'Duration:',
-            'Item count and format:', 'Scoring and interpretation:',
-            'Evidence required to continue:', 'Teacher decision: confirm blueprint / revise blueprint',
-            '| Dimension | Status | Evidence | Repeated pattern | Teaching impact | Confidence |'
+            '课程档案:', '当前步骤:', '已确认:', '缺少信息:', '本轮处理:', '下一步:',
+            '匿名课程ID:', '课程身份:', '主目标和次目标:',
+            '目标日期和成功标准:', '学习证据:',
+            '单节时长和每周频率:', '可用周数和截止时间:',
+            '教学形式和精讲/练习比例:', '教学场景、人数和授课方式:',
+            '课后作业容量:', '设备和访问条件:', '需要输出的材料:',
+            '未解决条件:', '教师决定: 确认课程条件 / 修改课程条件 / 补充缺失信息',
+            '诊断目的:', 'Course boundary:', '覆盖的前置知识:',
+            '覆盖的核心内容:', '能力维度:', '时长:',
+            '题量和形式:', '评分和解释方式:',
+            '继续下一步所需证据:', '教师决定: 确认蓝图 / 修改蓝图',
+            '| 维度 | 状态 | 证据 | 重复模式 | 教学影响 | 置信度 |'
         )) {
             if ($templatesContent -notmatch [regex]::Escape($templateField)) {
                 $failures.Add("templates.md missing exact initial field: $templateField")
@@ -772,9 +796,9 @@ Accepted alternative methods
 
         foreach ($researchTemplateField in @(
             '## Research Task Card',
-            'Course and version:', 'Student stage and setting:', 'Primary goal and target date:',
-            'Current module:', 'Known textbook or syllabus:', 'Questions to verify:',
-            'Required official evidence:', 'Required book evidence:',
+            '课程和版本:', '学生阶段和教学场景:', '主目标和目标日期:',
+            '当前单元:', '已知教材或 syllabus:', '需要核验的问题:',
+            '需要的官方证据:', '需要的书籍证据:',
             '## Source Record',
             'Claim type: course fact / disciplinary fact / teaching recommendation',
             'Evidence level: A / B / C / D', 'Institution or author:',
@@ -783,14 +807,14 @@ Accepted alternative methods
             'Cross-validation:', 'Replacement or conflict risk:', 'Verification status:',
             'Provenance/original-adapted status:', 'License/reuse status:', 'Intended use:',
             '## Textbook Comparison',
-            'Teacher decision: choose one primary textbook / request new candidates / provide assigned book',
+            '教师决定: 选择一本主教材 / 重新推荐教材 / 提供指定教材',
             '## Course Evidence Package',
             'Course identity and version:', 'School Course Boundary:', 'Textbook Knowledge Mainline:',
             'Required / recommended / excluded content:', 'Prerequisite relationships:',
             'Assessment and marking requirements:', 'Official, school, and recommended sequence:',
             'Learner evidence gap:', 'Source list:', 'Source conflicts:', 'Unresolved items:',
             'Blocking unresolved items and conflicts:', 'Non-blocking follow-ups:',
-            'Teacher decision: A confirm / B modify order / C research again / D provide school material',
+            '教师决定: A 确认资料包 / B 修改顺序 / C 重新检索 / D 提供学校材料',
             'If any blocking item remains, Decision A is unavailable'
         )) {
             if ($templatesContent -notmatch [regex]::Escape($researchTemplateField)) {
@@ -823,7 +847,7 @@ Accepted alternative methods
             'Review and contingency:', 'Risks, triggers, and alternatives:',
             'Next 2-4 lessons to prepare after confirmation:', 'Selected capacity route:',
             'Selected route basis and implications:',
-            'Teacher decision: A confirm / B change proportions / C change order or allocation / D change objectives / E add evidence'
+            '教师决定: A 确认课程周期 / B 修改比例 / C 修改顺序或课时分配 / D 修改目标 / E 补充证据'
         )) {
             $fieldPattern = '(?m)^' + [regex]::Escape($planningTemplateField) + '\s*$'
             if ($templatesContent -notmatch $fieldPattern) {
@@ -843,17 +867,17 @@ Accepted alternative methods
         }
 
         foreach ($lessonTemplateField in @(
-            '## Lesson Batch Header', 'Current state: S8', 'Primary textbook and chapters:',
-            'Course-cycle stage:', 'Learner evidence used:', 'Package mode:', 'Lessons in this batch:',
-            'Source status:', 'Release label: teacher-review-ready / draft', 'Teacher checks still required:',
-            '## Single-Lesson Plan', 'Position in cycle:', 'Evidence addressed:',
-            'Objectives and exit criteria:', 'Timeline with teacher move, learner action, question, evidence, and branch:',
-            'Knowledge explanation or question route:', 'Anticipated errors and responses:',
-            'Faster-progress branch:', 'Slower-progress branch:', 'Post-lesson reflection fields:',
-            '## Practice Question Record', 'Year/series/edition and item:',
-            'Official / licensed / original / adapted:', 'Concept and cognitive demand:',
-            'Difficulty and expected time:', 'Student prompt:', 'Teacher solution:',
-            'Common error and cause:', 'Variant:', 'Second-attempt problem:'
+            '## Lesson Batch Header', '当前步骤: 准备本次课程', '主教材和章节:',
+            '课程周期位置:', '使用的学生证据:', '材料类型:', '本批次课程:',
+            '资料状态:', '发布标签: 可供老师审阅 / 草稿', '仍需老师检查:',
+            '## Single-Lesson Plan', '课程周期位置:', '针对的证据:',
+            '目标和退出标准:', '时间线（教师动作、学生动作、问题、证据、分支）:',
+            '知识讲解或提问路线:', '预判错误和应对:',
+            '进度更快分支:', '进度更慢分支:', '课后复盘字段:',
+            '## Practice Question Record', '年份/系列/版本和题号:',
+            '官方 / 授权 / 原创 / 改编:', '知识点和认知要求:',
+            '难度和预计用时:', '学生版题目:', '教师版解答:',
+            '常见错误和原因:', '变式:', '二次尝试题:'
         )) {
             if ($templatesContent -notmatch [regex]::Escape($lessonTemplateField)) {
                 $failures.Add("templates.md missing exact Task 6 field: $lessonTemplateField")
@@ -866,23 +890,23 @@ Accepted alternative methods
         }
 
         foreach ($reflectionTemplateField in @(
-            '## Anonymous Record Write Preview', 'Proposed directory:', 'Anonymous identifier:',
-            'Files to create or modify:', 'Fields to store:',
-            'Original materials: reference only / copy allowed', 'Identifiable information excluded:',
-            'Teacher decision: approve / revise / do not save',
-            '## Post-Lesson Reflection', 'Planned versus completed content:',
-            'Independent performance:', 'Representative success:', 'Representative errors:',
-            'Exact sticking point:', 'Timing variance:', 'Homework evidence:', 'Learner feedback:',
-            'Teacher judgment:', 'Evidence confidence:',
+            '## Anonymous Record Write Preview', '拟保存目录:', '匿名标识:',
+            '将创建或修改的文件:', '将保存的字段:',
+            '原始材料: 仅引用 / 允许复制', '已排除可识别信息:',
+            '教师决定: 确认保存 / 修改后保存 / 不保存',
+            '## Post-Lesson Reflection', '计划内容与实际完成:',
+            '独立完成表现:', '代表性成功:', 'Representative errors:',
+            '精确卡点:', '时间偏差:', '作业证据:', '学生反馈:',
+            '教师判断:', '证据置信度:',
             '## Regular-Class Evidence', 'Class accuracy:', 'Sampled work:',
             'High/middle/foundation tier performance:', 'Teacher observation:',
             'Stage-test statistics:', 'Evidence items supplied:',
-            '## Adjustment Proposal', 'Adjustment level: minor / moderate / major',
-            'Decision type: adjust / continue unchanged',
-            'No-change rationale and exit criteria evidence:',
-            'Evidence:', 'Current mastery state:', 'Proposed change:', 'Effect on next lessons:',
-            'Effect on course cycle:', 'Rollback state if required:',
-            'Teacher decision: confirm / revise / collect more evidence',
+            '## Adjustment Proposal', '调整级别: 小调整 / 中等调整 / 大调整',
+            '决定类型: 调整 / 保持不变',
+            '不调整理由和退出标准证据:',
+            'Evidence:', '当前掌握状态:', '拟调整内容:', '对下一节课的影响:',
+            '对课程周期的影响:', '如需要则回退到:',
+            '教师决定: 确认调整 / 修改调整 / 继续收集证据',
             '## Course Summary', 'Initial goals:', 'Actual teaching delivered:',
             'Evidence of knowledge and skill change:', 'Goals achieved or not achieved:',
             'Remaining gaps:', 'Effective methods:', 'Low-value methods:',
@@ -900,27 +924,44 @@ Accepted alternative methods
         ))) {
             $failures.Add("templates.md Task 7 headings are out of order")
         }
+        if (-not (Test-OrderedPhrases -Content $templatesContent -Phrases @(
+            '## Anonymous Record Write Preview', '## Local Roster Write Preview',
+            '## Export Options', '## Post-Lesson Reflection'
+        ))) {
+            $failures.Add("templates.md local roster/export headings are out of order")
+        }
+        foreach ($localRosterOrExportField in @(
+            '本地档案路径:', '学生姓名:', '年级:', '科目或学习体系:', '一共几节课:',
+            '学到哪里了:', '下一节课重点:', '最近一次上课日期:', '匿名课程ID:',
+            '教师决定: 确认写入本地档案 / 修改后再写入 / 不保存档案',
+            '可导出材料:', '默认排除真实姓名: 是', '导出选项: 生成PDF / 生成PPT / PDF和PPT都生成 / 暂不导出',
+            '教师决定: 生成PDF / 生成PPT / 都生成 / 暂不导出 / 修改后再导出'
+        )) {
+            if ($templatesContent -notmatch [regex]::Escape($localRosterOrExportField)) {
+                $failures.Add("templates.md missing local roster/export field: $localRosterOrExportField")
+            }
+        }
 
         if (-not (Test-OrderedPhrases -Content $templatesContent -Phrases @(
-            'Identifiable information excluded:', 'Record classification: pseudonymous / anonymous-minimized',
-            'Retention period and review date:', 'Authorized access:', 'Export decision and approval:',
-            'Lawful-basis and institution-policy confirmation:',
-            'Teacher decision: approve / revise / do not save'
+            '已排除可识别信息:', '记录分类: 假名化 / 匿名最小化',
+            '保留期限和复查日期:', '授权访问范围:', '导出决定和批准:',
+            '合法依据和机构政策确认:',
+            '教师决定: 确认保存 / 修改后保存 / 不保存'
         ))) {
             $failures.Add("templates.md anonymous write preview must place teacher decision after all governance fields")
         }
         if (-not (Test-OrderedPhrases -Content $templatesContent -Phrases @(
-            'Decision type: adjust / continue unchanged',
-            'Adjustment level: minor / moderate / major',
-            'No-change rationale and exit criteria evidence:'
+            '决定类型: 调整 / 保持不变',
+            '调整级别: 小调整 / 中等调整 / 大调整',
+            '不调整理由和退出标准证据:'
         ))) {
             $failures.Add("templates.md adjustment proposal must represent decision type before level and rationale")
         }
 
         foreach ($recordTemplateField in @(
-            'Record classification: pseudonymous / anonymous-minimized',
-            'Retention period and review date:', 'Authorized access:',
-            'Export decision and approval:', 'Lawful-basis and institution-policy confirmation:',
+            '记录分类: 假名化 / 匿名最小化',
+            '保留期限和复查日期:', '授权访问范围:',
+            '导出决定和批准:', '合法依据和机构政策确认:',
             '## Mastery Update Record', 'Concept:', 'Previous level:', 'New level:',
             'Limitations:', 'Date:', 'Confidence:',
             'Teacher impression / direct evidence:',
