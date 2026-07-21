@@ -44,4 +44,8 @@ The Skill is a workflow guide, not a compliance tool. It requires teacher confir
 
 ## License
 
-No open-source license has been selected yet. Choose and add a license before encouraging third-party reuse.
+This project uses a source-available, non-commercial license.
+
+You may read, study, evaluate, and use it for personal or non-commercial teaching preparation. Commercial use, resale, SaaS integration, paid training, paid tutoring products, or other commercial derivative use requires prior written permission from the author.
+
+See [LICENSE](LICENSE) for details. This is not an OSI-approved open-source license.
